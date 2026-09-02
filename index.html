@@ -130,14 +130,8 @@
   .recent-tier.promoter { color: #fcd34d; background: rgba(245,158,11,.13); border: 1px solid rgba(245,158,11,.42); }
   @media (max-width: 620px) { .dash-stats { grid-template-columns: repeat(2, 1fr); } }
 
-  /* ---- single-page: studio hidden until authed ---- */
-  #studio-shell { display: none; }
-  body.auth #studio-shell { display: block; }
-  #public-landing { display: block; }
-  body.auth #public-landing { display: none; }
-  body:not(.auth) .pane,
-  body:not(.auth) .action-bar,
-  body:not(.auth) > footer { display: none !important; }
+  /* ---- single-page: studio always visible, no auth gate ---- */
+  #studio-shell { display: block; }
 
   /* ---- landing (public) styles — inline, no style.css dependency ---- */
   :root {
@@ -860,8 +854,8 @@
 <nav class="tabbar" id="tabbar">
   <div class="tabs" id="tabs">
     <span class="tab-pill" id="tab-pill"></span>
-    <button class="tab active" id="tab-overview" data-tab="overview"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Overview</button>
-    <button class="tab" id="tab-optimize" data-tab="optimize"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>Optimizer</button>
+    <button class="tab" id="tab-overview" data-tab="overview"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Overview</button>
+    <button class="tab active" id="tab-optimize" data-tab="optimize"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>Optimizer</button>
     <button class="tab" id="tab-check" data-tab="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>Check video</button>
     <button class="tab" id="tab-extension" data-tab="extension"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 13.5V19a2 2 0 0 1-2 2h-2.5a1.6 1.6 0 0 0-3.2 0H9a2 2 0 0 1-2-2v-2.3a1.7 1.7 0 0 0 0-3.4V9a2 2 0 0 1 2-2h2.3a1.7 1.7 0 0 0 3.4 0H17a2 2 0 0 1 2 2v2.5a1.7 1.7 0 0 0 0 3.4Z"/></svg>Extension</button>
     <button class="tab" id="tab-pricing" data-tab="pricing"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7.2-7.2a2 2 0 0 1-.6-1.4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 1.4.6l7.2 7.2a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>Plans</button>
@@ -939,7 +933,7 @@
 </section>
 
 <main class="page-content-container">
-  <section id="pane-overview" class="pane active">
+  <section id="pane-overview" class="pane">
     <div class="ov-decor" aria-hidden="true"></div>
     <div class="card">
       <div class="card-head" id="dash-profile-head">
@@ -1017,7 +1011,7 @@
   </div>
   </section>
 
-  <section id="pane-optimize" class="pane">
+  <section id="pane-optimize" class="pane active">
     <div class="card dropzone" id="dropzone" tabindex="0">
       <input type="file" id="file-input" accept="video/mp4,video/quicktime,video/*" hidden>
       <span class="dz-badge">IN-BROWSER</span>
@@ -1589,220 +1583,6 @@
 </div>
 </div>
 
-<!-- public landing (shown until authed) -->
-<div id="public-landing">
-  <div class="lp-grid"></div>
-  <div class="lp-glow lp-glow-a"></div>
-  <div class="lp-glow lp-glow-b"></div>
-  <div class="lp-glow lp-glow-c"></div>
-  <div class="maint-banner" id="maint-banner-landing" style="max-width:720px" aria-live="polite">
-    <div class="maint-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4.5 4.5 0 0 0-5.4 0L3 10.5l3.6 6 6.3-4.2a4.5 4.5 0 0 0 0-5.4l1.8-1.6Z"/><path d="M21 13.5 13.5 21"/></svg></div>
-    <div class="maint-in">
-      <b>MAINTENANCE MODE</b>
-      <span id="maint-msg-landing"></span>
-    </div>
-  </div>
-  <div class="lp-wrap">
-    <header class="lp-header">
-      <div class="lp-brand">
-        <img src="logo.png" alt="PREX">
-        <div>
-          <div class="lp-t1">PREX METHOD</div>
-          <div class="lp-t2">Uploads engineered to survive TikTok</div>
-        </div>
-      </div>
-      <nav class="lp-nav">
-        <a class="lp-hide-m" href="#lp-features">Features</a>
-        <a class="lp-hide-m" href="#lp-pricing">Plans</a>
-        <a class="lp-btn discord sm" href="/login">Login</a>
-      </nav>
-    </header>
-
-    <section class="lp-hero">
-      <span class="lp-eyebrow">PREX METHOD &middot; v4.0</span>
-      <div><img class="lp-logo" src="logo.png" alt="PREX"></div>
-      <div class="lp-h1">Your uploads, engineered to survive TikTok.</div>
-      <p class="lp-tag">PREX Method restructures your MP4 so TikTok serves it at <b>full resolution and true frame rate</b> — no re-encoding, no quality loss, no editing inside TikTok.</p>
-      <div class="lp-cta">
-        <a class="lp-btn discord" href="/login">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.89-1.52.07.07 0 0 0-.08.04c-.21.38-.45.87-.61 1.26a18.3 18.3 0 0 0-5.48 0 12.6 12.6 0 0 0-.62-1.26.08.08 0 0 0-.08-.04 19.7 19.7 0 0 0-4.88 1.52.07.07 0 0 0-.04.03C.53 9.05-.32 13.58.1 18.06a.08.08 0 0 0 .03.05 19.9 19.9 0 0 0 5.99 3.03.08.08 0 0 0 .08-.03c.46-.63.87-1.3 1.22-2a.08.08 0 0 0-.04-.11 13.1 13.1 0 0 1-1.87-.9.08.08 0 0 1-.01-.12c.13-.09.25-.19.37-.29a.07.07 0 0 1 .08-.01 14.2 14.2 0 0 0 12.06 0 .07.07 0 0 1 .08.01c.12.1.25.2.37.29a.08.08 0 0 1 0 .12c-.6.35-1.22.65-1.88.9a.08.08 0 0 0-.04.11c.36.7.77 1.37 1.22 2a.08.08 0 0 0 .08.03 19.8 19.8 0 0 0 6-3.03.08.08 0 0 0 .03-.05c.5-5.18-.84-9.68-3.55-13.66a.06.06 0 0 0-.04-.03ZM8.02 15.33c-1.18 0-2.16-1.08-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.34-.96 2.42-2.16 2.42Zm7.97 0c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.22 0 2.18 1.1 2.16 2.42 0 1.34-.94 2.42-2.16 2.42Z"/></svg>
-          Login with Discord
-        </a>
-        <a class="lp-btn ghost" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener">Join the Discord server</a>
-      </div>
-      <div class="lp-pills">
-        <span class="lp-pill">Byte-identical video</span>
-        <span class="lp-pill">60 / 120 fps kept</span>
-        <span class="lp-pill">Any editor works</span>
-        <span class="lp-pill">Runs in your browser</span>
-      </div>
-    </section>
-
-    <div class="lp-stats">
-      <div class="lp-stats-label">LIVE STUDIO STATUS</div>
-      <div class="lp-stats-grid">
-        <div class="lp-stat"><div class="lp-num" id="s-size">—</div><div class="lp-cap">TOTAL SIZE OPTIMIZED</div><div class="lp-live"><span class="dot"></span>LIVE</div></div>
-        <div class="lp-stat"><div class="lp-num" id="s-total">—</div><div class="lp-cap">FILES OPTIMIZED</div><div class="lp-live"><span class="dot"></span>LIVE</div></div>
-        <div class="lp-stat"><div class="lp-num" id="s-today">—</div><div class="lp-cap">TODAY</div><div class="lp-live"><span class="dot"></span>LIVE</div></div>
-        <div class="lp-stat"><div class="lp-num" id="s-month">—</div><div class="lp-cap">THIS MONTH</div><div class="lp-live"><span class="dot"></span>LIVE</div></div>
-      </div>
-    </div>
-
-    <div id="landing-marketing">
-      <section class="lp-sec" id="lp-features">
-        <div class="lp-sec-head"><div class="lp-k">WHY PREX</div><div class="lp-h2">Built so TikTok can't wreck your quality</div><div class="lp-p">Every export from CapCut, DaVinci, Premiere or your phone gets rebuilt the right way — before it ever reaches TikTok.</div></div>
-        <div class="lp-feat-grid">
-          <div class="lp-feat"><div class="lp-fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></div><h3>Zero re-encoding</h3><p>PREX rebuilds the container only — your video data stays byte-identical. No quality pass, no generation loss.</p></div>
-          <div class="lp-feat"><div class="lp-fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3l2.5-7 4 14 2.5-7h8"/></svg></div><h3>True fps preserved</h3><p>60 and 120 fps sources keep their frame rate. TikTok serves your full resolution instead of re-compressing to SD.</p></div>
-          <div class="lp-feat"><div class="lp-fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15h10"/></svg></div><h3>Any editor works</h3><p>H.264 exports stay lossless. Non-H.264 files are automatically converted to a clean H.264+AAC master — upload always succeeds.</p></div>
-          <div class="lp-feat"><div class="lp-fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></div><h3>Check what TikTok serves</h3><p>Paste any video link and see the exact served resolution, bitrate and fps — proof your upload survived.</p></div>
-          <div class="lp-feat"><div class="lp-fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><h3>Runs in your browser</h3><p>Everything happens client-side with in-browser FFmpeg. Your video never leaves your machine.</p></div>
-          <div class="lp-feat"><div class="lp-fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div><h3>No ban risk</h3><p>PREX never touches TikTok — no sessions, no injections, no account interaction. It only edits your file.</p></div>
-        </div>
-      </section>
-
-      <section class="lp-sec" id="lp-how">
-        <div class="lp-sec-head"><div class="lp-k">HOW IT WORKS</div><div class="lp-h2">Three steps. Thirty seconds.</div></div>
-        <div class="lp-steps">
-          <div class="lp-step"><div class="lp-n">1</div><h3>Export from your editor</h3><p>CapCut, DaVinci, Premiere, Filmora — any software. Export as MP4, H.264 if you can.</p></div>
-          <div class="lp-step"><div class="lp-n">2</div><h3>Drop it in the studio</h3><p>PREX restructures the container instantly. H.264 files come out byte-identical; everything else is auto-fixed.</p></div>
-          <div class="lp-step"><div class="lp-n">3</div><h3>Upload from your PC</h3><p>Post on tiktok.com with high-quality uploads ON, then verify with the Check tab.</p></div>
-        </div>
-      </section>
-
-      <section class="lp-sec" id="lp-faq">
-        <div class="lp-sec-head"><div class="lp-k">FAQ</div><div class="lp-h2">Questions members ask</div></div>
-        <div class="lp-faq">
-          <div class="lp-qa"><b>Will my video be re-compressed?</b><span>No. For H.264 sources the video track is byte-identical — TikTok sees the file as already optimized. Non-H.264 files get one clean H.264 conversion (CRF 14, near-lossless) so the upload always succeeds.</span></div>
-          <div class="lp-qa"><b>Does it work with 120 fps?</b><span>Yes. 120 fps sources are supported and keep their frame structure; TikTok displays up to 60 fps, but the served quality stays full-resolution and sharp.</span></div>
-          <div class="lp-qa"><b>Is my video uploaded to your server?</b><span>Never. Everything runs in your browser with in-browser FFmpeg. Only anonymized counters are sent to the studio.</span></div>
-          <div class="lp-qa"><b>How do I subscribe?</b><span>Join the Discord server, pay the $8/month, and you're in. Sign in with Discord and the studio unlocks.</span></div>
-          <div class="lp-qa"><b>What if my upload still fails?</b><span>The studio auto-converts any codec to H.264+AAC, so uploads are compatible by construction. Use the Check tab to verify what TikTok serves after posting.</span></div>
-        </div>
-      </section>
-    </div>
-
-    <section class="lp-sec" id="lp-pricing">
-      <div class="lp-sec-head">
-        <div class="lp-k">PLANS</div>
-        <div class="lp-h2">Pick your tier.</div>
-        <div class="lp-p">Free to start, boost to grow, VIP for unlimited everything — 4K, 120fps and full support. Promoters get the VIP pass for free.</div>
-      </div>
-
-      <div class="tier-grid">
-        <!-- Member -->
-        <div class="tier-card tier-member">
-          <div class="tier-head">
-            <span class="tier-ic tier-ic-member"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.5 2.5 4 4 4 4H8s2.5-1.5 4-4Z"/><path d="M5 10c0 4 2.5 7 7 7s7-3 7-7H5Z"/><path d="M12 17v4"/></svg></span>
-            <div class="tier-name">MEMBER</div>
-            <div class="tier-tag">Start free. Upgrade when you grow.</div>
-          </div>
-          <div class="tier-price">$0<span>free forever</span></div>
-          <ul class="tier-list">
-            <li class="ok">7× usage per week</li>
-            <li class="ok">Up to 1080p • 60fps</li>
-            <li class="ok">PREX Method optimizer</li>
-            <li class="ok">Check video tool</li>
-            <li class="no">4K / 120fps output</li>
-          </ul>
-          <a class="tier-cta tier-member" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener">Join the community free</a>
-        </div>
-
-        <!-- Booster -->
-        <div class="tier-card tier-booster">
-          <div class="tier-head">
-            <span class="tier-ic tier-ic-booster"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8-.8-.7-2.2-.7-3 .8Z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.9 12.9 0 0 1 22 2c0 2.72-.78 7.5-6 11a22 22 0 0 1-4 2Z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span>
-            <div class="tier-name">BOOSTER</div>
-            <div class="tier-tag">Drop a server boost — double your weekly usage.</div>
-          </div>
-          <div class="tier-price">BOOST<span>the server</span></div>
-          <ul class="tier-list">
-            <li class="ok">15× usage per week</li>
-            <li class="ok">Up to 1080p • 60fps</li>
-            <li class="ok">All Member perks</li>
-            <li class="ok">Booster role in Discord</li>
-            <li class="no">4K / 120fps output</li>
-          </ul>
-          <a class="tier-cta tier-booster" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener">Boost the PREX server</a>
-          <div class="tier-note">Requires an active server boost (Discord Nitro).</div>
-        </div>
-
-        <!-- VIP -->
-        <div class="tier-card tier-vip">
-          <div class="tier-badge">BEST SELLER</div>
-          <span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span>
-          <div class="tier-head">
-            <span class="tier-ic tier-ic-vip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.56 2.5 8.6 8.06l-6.1.53 4.6 4.04-1.36 6L12 15.5l6.26 3.13-1.36-6 4.6-4.04-6.1-.53L11.56 2.5Z"/></svg></span>
-            <div class="tier-name">VIP</div>
-            <div class="tier-tag">Unlimited. The full engine. Zero compromises.</div>
-          </div>
-          <div class="tier-price">Contributor</div>
-          <ul class="tier-list">
-            <li class="ok">Unlimited usage</li>
-            <li class="ok">Up to 4K • 120fps</li>
-            <li class="ok">Full support</li>
-            <li class="ok">Real-time studio stats</li>
-            <li class="ok">Priority feature updates</li>
-          </ul>
-          <a class="tier-cta tier-vip" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.735H5.81a1 1 0 0 1-.957-.735L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M20 21H4"/></svg>Join Contributor</a>
-        </div>
-      </div>
-
-      <div class="promo-box">
-        <div class="promo-grid">
-          <div class="promo-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
-          <div>
-            <div class="promo-title">PROMOTER <span class="promo-tag">FREE</span></div>
-            <div class="promo-tagline">Promote the method per our <b>desired requirements</b> — and you <b>instantly receive the full VIP pass</b>. No payment, no waiting.</div>
-          </div>
-<a class="promo-cta" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>Become a Promoter</a>
-        </div>
-        <div class="promo-chips">
-          <span class="promo-chip">∞ UNLIMITED</span>
-          <span class="promo-chip">4K • 120FPS</span>
-          <span class="promo-chip">GOLD BADGE</span>
-        </div>
-        <div class="promo-steps">
-          <div class="promo-step"><span class="ps-num">1</span>Get the <b>Promoter role</b> in Discord</div>
-          <span class="promo-arrow">→</span>
-          <div class="promo-step"><span class="ps-num">2</span>Promote the method per the <b>requirements</b></div>
-          <span class="promo-arrow">→</span>
-          <div class="promo-step"><span class="ps-num">3</span>Receive <b>VIP instantly</b> — 4K • 120fps • ∞</div>
-        </div>
-      </div>
-
-      <div class="tier-cmp-wrap">
-        <div class="lp-k cmp-label">COMPARE TIERS</div>
-        <div class="tier-cmp-box">
-          <table class="tier-cmp">
-            <thead>
-              <tr><th></th><th class="c-member">Member</th><th class="c-booster">Booster</th><th class="c-vip">VIP</th><th class="c-promoter">Promoter</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Usage / week</td><td class="c-d1">7×</td><td class="c-d2">15×</td><td class="c-d3">Unlimited</td><td class="c-d4">Unlimited</td></tr>
-              <tr><td>Max resolution</td><td class="c-d1">1080p</td><td class="c-d2">1080p</td><td class="c-d3">4K</td><td class="c-d4">4K</td></tr>
-              <tr><td>Frame rate</td><td class="c-d1">60fps</td><td class="c-d2">60fps</td><td class="c-d3">120fps</td><td class="c-d4">120fps</td></tr>
-              <tr><td>Support</td><td class="c-d1">Community</td><td class="c-d2">Community</td><td class="c-d3">Full support + instant</td><td class="c-d4">Full support</td></tr>
-              <tr><td>Price</td><td class="c-d1">$0</td><td class="c-d2">Server boost</td><td class="c-d3"><span class="c-pill">Contributor</span></td><td class="c-d4"><span class="c-pill gold">FREE</span></td></tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="lp-p" style="text-align:center;margin-top:16px">Every tier includes the PREX Method optimizer and Check video. VIP unlocks everything — the way the engine was meant to be used. Promoter = the free VIP pass: promote the method per requirements and the tier unlocks instantly.</div>
-      </div>
-    </section>
-
-    <footer class="lp-foot">
-      <div class="lp-foot-links">
-        <a href="/login">Login</a>
-        <a href="/accesspass">Access pass</a>
-        <a href="/admin">Admin</a>
-        <a href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener">Discord</a>
-      </div>
-      <div class="lp-cp">PREX Method &middot; TikTok Upload Studio &middot; Independent tool — not affiliated with TikTok or ByteDance.</div>
-    </footer>
-  </div>
-</div>
-
 <script src="ffmpeg.js"></script>
 <script src="inflate.js"></script>
 <script src="prex.js"></script>
@@ -1990,11 +1770,13 @@
 
 
   function whoAmI() {
+    /* No login gate: studio is open to everyone. This only enriches the
+       Overview dashboard if a session happens to exist — it never hides
+       or redirects the upload page. */
     fetch('api/me', { cache: 'no-store', credentials: 'same-origin' })
       .then(function (r) { if (r.status === 401) throw new Error('no session'); return r.json(); })
       .then(function (j) {
         if (!j || !j.ok) return;
-        setAuth(true);
         cloneMarketing();
         fillMe(j);
         maybeShowFreeClaim(j);
@@ -2002,7 +1784,7 @@
           try { window.dispatchEvent(new Event('resize')); } catch (e) {}
         }, 180);
       })
-      .catch(function () { setAuth(false); });
+      .catch(function () {});
   }
 
   function fmtN(n) {
@@ -2184,7 +1966,6 @@
 
     var actions = [
       { label: 'Go to Optimizer', href: '/' },
-      { label: 'Go to Login', href: '/login.html' },
       { label: 'Go to Dashboard', href: '/admin.html' },
       { label: 'Go to Access', href: '/access.html' },
       { label: 'Set Light theme', run: function () { setTheme('light'); } },
