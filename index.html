@@ -1,402 +1,1128 @@
 <!DOCTYPE html>
-<html lang="ka" class="dark">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MOON METHOD</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            50: '#f0fdf4',
-                            500: '#22c55e',
-                            600: '#16a34a',
-                            900: '#14532d',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+<title>PREX Optimizer - TikTok Upload Studio</title>
+<link rel="icon" type="image/png" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="style.css">
+<style>
+  .dash-avatar {
+    position: relative; overflow: hidden;
+    width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #7c3aed, #a855f7 45%, #e879f9 92%);
+    color: #fff; font-weight: 800; font-size: 16px;
+    background-size: cover; background-position: center;
+    box-shadow: 0 6px 18px rgba(139,92,246,.35), inset 0 0 0 1px rgba(255,255,255,.18);
+  }
+  .hd-avatar {
+    position: relative; overflow: hidden;
+    width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #7c3aed, #a855f7 45%, #e879f9 92%);
+    color: #fff; font-weight: 800; font-size: 13px;
+    background-size: cover; background-position: center;
+    box-shadow: 0 4px 14px rgba(139,92,246,.35), inset 0 0 0 2px rgba(255,255,255,.18);
+  }
+  .avatar-img {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    border-radius: 50%; object-fit: cover; display: block;
+  }
+  .dash-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+  }
+  .dash-stat {
+    padding: 16px 12px; border-radius: 16px; text-align: center;
+    background: rgba(255,255,255,.045); border: 1px solid var(--line, rgba(196,181,253,.18));
+    transition: border-color .2s, transform .2s;
+  }
+  .dash-stat:hover { border-color: rgba(168,85,247,.5); transform: translateY(-2px); }
+  .dash-num {
+    font-size: 26px; font-weight: 800; color: var(--pink, #e9d5ff);
+    font-variant-numeric: tabular-nums;
+  }
+  .dash-cap { margin-top: 5px; font-size: 10.5px; font-weight: 700; letter-spacing: .12em; color: #777; }
+  .dash-bars { display: flex; align-items: flex-end; gap: 6px; height: 90px; margin-top: 6px; }
+  .dash-bar {
+    flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+    height: 100%;
+  }
+  .dash-bar .fill {
+    width: 100%; border-radius: 6px 6px 2px 2px;
+    background: linear-gradient(180deg, #a855f7, #7c3aed);
+    min-height: 2px; transition: height .4s;
+  }
+  .dash-bar .fill.zero { background: rgba(255,255,255,.08); }
+  .dash-bar .lab {
+    margin-top: 6px; font-size: 9px; font-weight: 700; letter-spacing: .05em; color: #777; white-space: nowrap;
+  }
+  .dash-bar .cnt { font-size: 10px; color: var(--pink); font-weight: 700; margin-bottom: 4px; }
+  .recent-list { display: flex; flex-direction: column; margin-top: 10px; }
+  .recent-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 4px; border-bottom: 1px solid rgba(196,181,253,.08);
+    animation: fadeUp .3s ease both;
+  }
+  .recent-row:last-child { border-bottom: 0; }
+  .recent-av {
+    position: relative; overflow: hidden; flex-shrink: 0;
+    width: 26px; height: 26px; border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, #7c3aed, #a855f7 45%, #e879f9 92%);
+    color: #fff; font-weight: 800; font-size: 11px;
+    box-shadow: 0 0 8px rgba(139,92,246,.35), inset 0 0 0 1px rgba(255,255,255,.18);
+  }
+  .recent-av .avatar-img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+  .recent-name {
+    font-size: 12.5px; font-weight: 600; color: #f5f3ff;
+    min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .recent-meta {
+    margin-left: auto; display: flex; align-items: center; gap: 7px;
+    font-size: 11px; color: #8b83b8; white-space: nowrap; font-variant-numeric: tabular-nums;
+  }
+  /* ---- studio tab bar — compact fixed pill, never stretches, scrolls only if it must ---- */
+  #studio-shell .tabbar {
+    width: 100% !important;
+    max-width: 1160px !important;
+    margin-inline: auto !important;
+    overflow-x: auto !important;
+    box-sizing: border-box;
+  }
+  #studio-shell .tabs {
+    display: flex !important;
+    flex: 0 0 auto !important;
+    width: fit-content !important;
+    max-width: none !important;
+    flex-wrap: nowrap !important;
+  }
+  #studio-shell .tab {
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 0 !important;
+    padding: 8px 14px !important;
+  }
+  /* shared page content wrapper — centered desktop max-width */
+  #studio-shell .page-content-container {
+    width: 100%;
+    max-width: 1160px;
+    margin-inline: auto;
+    box-sizing: border-box;
+  }
+  #studio-shell .page-content-container > .pane {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  .recent-tier {
+    font-size: 9.5px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 999px;
+  }
+  .recent-tier.member { color: #94a3b8; background: rgba(148,163,184,.12); border: 1px solid rgba(148,163,184,.3); }
+  .recent-tier.booster { color: #f9a8d4; background: rgba(236,72,153,.12); border: 1px solid rgba(236,72,153,.35); }
+  .recent-tier.vip { color: #e879f9; background: rgba(168,85,247,.14); border: 1px solid rgba(168,85,247,.4); }
+  .recent-tier.promoter { color: #fcd34d; background: rgba(245,158,11,.13); border: 1px solid rgba(245,158,11,.42); }
+  @media (max-width: 620px) { .dash-stats { grid-template-columns: repeat(2, 1fr); } }
+
+  /* ---- single-page: studio hidden until authed ---- */
+  #studio-shell { display: none; }
+  body.auth #studio-shell { display: block; }
+  #public-landing { display: block; }
+  body.auth #public-landing { display: none; }
+  body:not(.auth) .pane,
+  body:not(.auth) .action-bar,
+  body:not(.auth) > footer { display: none !important; }
+
+  /* ---- landing (public) styles — inline, no style.css dependency ---- */
+  :root {
+    --lp-dim: #a9a1d4;
+    --lp-v2: #c4b5fd;
+    --lp-pink: #e9d5ff;
+    --lp-login: #7c3aed;
+    --sans: "Sora","Inter","Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
+    --body: "Inter","Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
+  }
+  body { background: #07060f; color: #f5f3ff; font-family: var(--body); }
+  /* Landing stays dark in every theme — it is a fixed dark design with light text */
+  #public-landing { position: relative; min-height: 100vh; background: #0a0716; color: #f5f3ff; }
+  [data-theme="light"] #public-landing { background: #0a0716; color: #f5f3ff; }
+  [data-theme="light"] #public-landing .lp-glow-a { opacity: .45; }
+  [data-theme="light"] #public-landing .lp-glow-b { opacity: .22; }
+  [data-theme="light"] #public-landing .lp-glow-c { opacity: .28; }
+  .lp-wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+  .lp-grid {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 90% 70% at 50% 0%, #000 30%, transparent 80%);
+  }
+  .lp-glow { position: fixed; z-index: 0; border-radius: 50%; filter: blur(130px); pointer-events: none; }
+  .lp-glow-a { width: 560px; height: 560px; top: -200px; left: -160px; background: #6d28d9; opacity: .45; }
+  .lp-glow-b { width: 480px; height: 480px; top: 30%; right: -180px; background: #d946ef; opacity: .22; }
+  .lp-glow-c { width: 440px; height: 440px; bottom: -200px; left: 30%; background: #4338ca; opacity: .28; }
+  .lp-header { padding: 26px 0 10px; display: flex; align-items: center; justify-content: space-between; }
+  .lp-brand { display: flex; align-items: center; gap: 13px; }
+  .lp-brand img {
+    width: 44px; height: 44px; object-fit: contain; padding: 6px;
+    background: linear-gradient(145deg, rgba(139, 92, 246, .26), rgba(34, 211, 238, .10));
+    border-radius: 13px;
+    box-shadow: 0 0 20px rgba(139, 92, 246, .45), 0 0 10px rgba(34, 211, 238, .16), inset 0 0 0 1px rgba(233, 213, 255, .4);
+  }
+  .lp-brand .lp-t1 { font-family: var(--sans); font-size: 16px; font-weight: 800; letter-spacing: .16em; color: #f5f3ff; }
+  .lp-brand .lp-t2 { font-size: 11px; color: var(--lp-dim); letter-spacing: .04em; margin-top: 2px; }
+  .lp-nav { display: flex; align-items: center; gap: 14px; }
+  .lp-nav a { color: var(--lp-dim); text-decoration: none; font-size: 13px; font-weight: 600; transition: color .2s; }
+  .lp-nav a:hover { color: #f5f3ff; }
+  .lp-btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+    padding: 12px 22px; border: 0; border-radius: 13px; cursor: pointer;
+    background: linear-gradient(135deg,#7c3aed,#a855f7 45%,#e879f9 92%); color: #fff;
+    font-family: var(--sans); font-size: 13px; font-weight: 800; letter-spacing: .06em;
+    text-decoration: none; box-shadow: 0 12px 32px rgba(139,92,246,.4);
+    transition: transform .15s, box-shadow .15s;
+  }
+  .lp-btn:hover { transform: translateY(-1px); box-shadow: 0 16px 38px rgba(139,92,246,.5); }
+  .lp-btn.ghost { background: rgba(139,92,246,.12); border: 1px solid rgba(168,85,247,.5); color: var(--lp-pink); box-shadow: 0 8px 26px rgba(139,92,246,.18); }
+  .lp-btn.login { background: linear-gradient(135deg,#7c3aed,#a855f7); box-shadow: 0 12px 32px rgba(139,92,246,.45); }
+  .lp-btn.sm { padding: 9px 16px; font-size: 12px; }
+  .lp-hero { text-align: center; padding: 56px 0 26px; }
+  .lp-eyebrow {
+    display: inline-block; margin-bottom: 18px; font-size: 11px; font-weight: 700; letter-spacing: .28em;
+    color: var(--lp-pink); background: rgba(139,92,246,.14); border: 1px solid rgba(168,85,247,.4);
+    padding: 6px 14px; border-radius: 999px; box-shadow: 0 0 24px rgba(139,92,246,.2);
+  }
+  .lp-logo {
+    width: 84px; height: 84px; object-fit: contain; padding: 12px; margin-bottom: 20px;
+    background: linear-gradient(145deg, rgba(139, 92, 246, .24), rgba(217, 70, 239, .10));
+    border-radius: 26px;
+    box-shadow: 0 0 40px rgba(139, 92, 246, .5), 0 0 20px rgba(217, 70, 239, .18), inset 0 0 0 1px rgba(233, 213, 255, .4);
+    animation: lpFloat 5s ease-in-out infinite;
+  }
+  @keyframes lpFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+  .lp-h1 {
+    font-family: var(--sans); font-size: clamp(32px,5.6vw,52px); font-weight: 800; letter-spacing: .02em;
+    color: #f5f3ff;
+  }
+  .lp-tag { margin: 14px auto 0; max-width: 640px; font-size: clamp(15px,2.4vw,18px); color: var(--lp-dim); line-height: 1.65; }
+  .lp-tag b { color: var(--lp-v2); }
+  .lp-cta { margin-top: 28px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .lp-pills { margin-top: 24px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  .lp-pill {
+    font-size: 12px; font-weight: 600; color: var(--lp-v2);
+    background: rgba(139,92,246,.1); border: 1px solid rgba(139,92,246,.35);
+    padding: 7px 14px; border-radius: 999px;
+  }
+  .lp-stats { margin: 30px auto 0; max-width: 860px; }
+  .lp-stats-label { text-align: center; font-size: 11px; font-weight: 700; letter-spacing: .22em; color: rgba(169,161,212,.7); margin-bottom: 14px; }
+  .lp-stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
+  .lp-stat {
+    position: relative;
+    background: linear-gradient(180deg,rgba(20,15,46,.7),rgba(10,8,26,.75));
+    border: 1px solid rgba(168,85,247,.25); border-radius: 18px; padding: 18px 14px; text-align: center;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+  }
+  .lp-stat::before { content: ""; position: absolute; top: -1px; left: 18%; right: 18%; height: 2px; border-radius: 18px 18px 0 0; opacity: 0; transition: opacity .25s; }
+  .lp-stat:hover { transform: translateY(-3px); box-shadow: 0 16px 44px rgba(139,92,246,.18); }
+  .lp-stat:hover::before { opacity: 1; }
+  .lp-stat:nth-child(1)::before { background: linear-gradient(90deg, transparent, #c084fc, transparent); }
+  .lp-stat:nth-child(2)::before { background: linear-gradient(90deg, transparent, #f9a8d4, transparent); }
+  .lp-stat:nth-child(3)::before { background: linear-gradient(90deg, transparent, #67e8f9, transparent); }
+  .lp-stat:nth-child(4)::before { background: linear-gradient(90deg, transparent, #6ee7b7, transparent); }
+  .lp-stat:nth-child(1):hover { border-color: rgba(168,85,247,.5); }
+  .lp-stat:nth-child(2):hover { border-color: rgba(236,72,153,.45); }
+  .lp-stat:nth-child(3):hover { border-color: rgba(34,211,238,.45); }
+  .lp-stat:nth-child(4):hover { border-color: rgba(52,217,123,.45); }
+  .lp-num {
+    font-family: var(--sans); font-size: 30px; font-weight: 800; color: #f5f3ff;
+    font-variant-numeric: tabular-nums;
+  }
+  .lp-cap { margin-top: 6px; font-size: 11px; font-weight: 700; letter-spacing: .14em; color: var(--lp-dim); }
+  .lp-live { display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 10px; font-weight: 700; letter-spacing: .12em; color: #34d97b; }
+  .lp-live .dot { width: 6px; height: 6px; border-radius: 50%; background: #34d97b; animation: pulse 1.6s infinite; box-shadow: 0 0 8px rgba(52,217,123,.8); }
+  .lp-sec { padding: 56px 0 8px; }
+  .lp-sec-head { text-align: center; margin-bottom: 32px; }
+  .lp-sec-head .lp-k { font-size: 11px; font-weight: 700; letter-spacing: .28em; color: #e879f9; }
+  .lp-sec-head .lp-h2 { font-family: var(--sans); font-size: clamp(23px,3.4vw,32px); font-weight: 800; color: #f5f3ff; margin-top: 8px; }
+  .lp-sec-head .lp-p { margin: 10px auto 0; max-width: 560px; color: var(--lp-dim); font-size: 14px; line-height: 1.6; }
+  .lp-feat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch; }
+  .lp-feat {
+    position: relative; display: flex; flex-direction: column;
+    background: linear-gradient(180deg,rgba(20,15,46,.65),rgba(10,8,26,.7));
+    border: 1px solid rgba(168,85,247,.22); border-radius: 20px; padding: 24px 22px;
+    color: #f5f3ff;
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+  }
+  .lp-feat::before { content: ""; position: absolute; top: -1px; left: 12%; right: 12%; height: 2px; border-radius: 20px 20px 0 0; opacity: 0; transition: opacity .25s; }
+  .lp-feat:hover { transform: translateY(-4px); box-shadow: 0 16px 44px rgba(139,92,246,.18); }
+  .lp-feat:hover::before { opacity: 1; }
+  .lp-feat .lp-fic { width: 42px; height: 42px; border-radius: 13px; display: flex; align-items: center; justify-content: center; background: rgba(139,92,246,.15); border: 1px solid rgba(168,85,247,.4); margin-bottom: 14px; transition: transform .2s, box-shadow .2s; }
+  .lp-feat:hover .lp-fic { transform: translateY(-2px) scale(1.06); box-shadow: 0 8px 22px rgba(0,0,0,.35); }
+  .lp-feat h3 { font-family: var(--sans); font-size: 16px; font-weight: 700; letter-spacing: .02em; }
+  .lp-feat p { flex: 1; margin-top: 8px; font-size: 13px; color: var(--lp-dim); line-height: 1.65; }
+  .lp-feat:nth-child(1) .lp-fic { background: rgba(168,85,247,.16); border-color: rgba(168,85,247,.45); }
+  .lp-feat:nth-child(2) .lp-fic { background: rgba(34,211,238,.14); border-color: rgba(34,211,238,.45); }
+  .lp-feat:nth-child(3) .lp-fic { background: rgba(232,121,249,.16); border-color: rgba(232,121,249,.45); }
+  .lp-feat:nth-child(4) .lp-fic { background: rgba(244,114,182,.15); border-color: rgba(244,114,182,.45); }
+  .lp-feat:nth-child(5) .lp-fic { background: rgba(52,217,123,.14); border-color: rgba(52,217,123,.45); }
+  .lp-feat:nth-child(6) .lp-fic { background: rgba(245,158,11,.15); border-color: rgba(245,158,11,.45); }
+  .lp-feat:nth-child(1) .lp-fic svg { stroke: #c084fc; }
+  .lp-feat:nth-child(2) .lp-fic svg { stroke: #67e8f9; }
+  .lp-feat:nth-child(3) .lp-fic svg { stroke: #f0abfc; }
+  .lp-feat:nth-child(4) .lp-fic svg { stroke: #f9a8d4; }
+  .lp-feat:nth-child(5) .lp-fic svg { stroke: #6ee7b7; }
+  .lp-feat:nth-child(6) .lp-fic svg { stroke: #fcd34d; }
+  .lp-feat:nth-child(1)::before { background: linear-gradient(90deg, transparent, #c084fc, transparent); }
+  .lp-feat:nth-child(2)::before { background: linear-gradient(90deg, transparent, #67e8f9, transparent); }
+  .lp-feat:nth-child(3)::before { background: linear-gradient(90deg, transparent, #f0abfc, transparent); }
+  .lp-feat:nth-child(4)::before { background: linear-gradient(90deg, transparent, #f9a8d4, transparent); }
+  .lp-feat:nth-child(5)::before { background: linear-gradient(90deg, transparent, #6ee7b7, transparent); }
+  .lp-feat:nth-child(6)::before { background: linear-gradient(90deg, transparent, #fcd34d, transparent); }
+  .lp-feat:nth-child(1):hover { border-color: rgba(168,85,247,.55); }
+  .lp-feat:nth-child(2):hover { border-color: rgba(34,211,238,.5); }
+  .lp-feat:nth-child(3):hover { border-color: rgba(232,121,249,.55); }
+  .lp-feat:nth-child(4):hover { border-color: rgba(244,114,182,.55); }
+  .lp-feat:nth-child(5):hover { border-color: rgba(52,217,123,.5); }
+  .lp-feat:nth-child(6):hover { border-color: rgba(245,158,11,.55); }
+  .lp-steps { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+  .lp-step {
+    background: linear-gradient(180deg,rgba(20,15,46,.65),rgba(10,8,26,.7));
+    border: 1px solid rgba(168,85,247,.22); border-radius: 20px; padding: 26px 22px; text-align: center;
+    color: #f5f3ff;
+    transition: transform .25s, border-color .25s, box-shadow .25s;
+  }
+  .lp-step:hover { transform: translateY(-4px); border-color: rgba(168,85,247,.5); box-shadow: 0 16px 44px rgba(139,92,246,.18); }
+  .lp-step .lp-n { width: 38px; height: 38px; margin: 0 auto 12px; border-radius: 50%; background: linear-gradient(135deg,#7c3aed,#a855f7 45%,#e879f9 92%); color: #fff; font-family: var(--sans); font-weight: 800; font-size: 15px; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 22px rgba(139,92,246,.4); }
+  .lp-step h3 { font-family: var(--sans); font-size: 14px; font-weight: 700; }
+  .lp-step p { margin-top: 8px; font-size: 12.5px; color: var(--lp-dim); line-height: 1.65; }
+  /* ---- pricing tiers ---- */
+  .tier-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 980px; margin: 0 auto; align-items: stretch; }
+  .tier-card {
+    position: relative; display: flex; flex-direction: column; gap: 14px;
+    padding: 30px 26px 26px; border-radius: 22px;
+    border: 1px solid rgba(255,255,255,.09);
+    background: linear-gradient(180deg, rgba(20,15,46,.75), rgba(10,8,26,.85));
+    box-shadow: 0 20px 50px rgba(8,5,24,.5), inset 0 1px 0 rgba(255,255,255,.06);
+    transition: transform .25s, box-shadow .25s, border-color .25s;
+    overflow: hidden;
+    container-type: inline-size;
+    z-index: 1;
+    animation: tierIn .7s cubic-bezier(.2,.7,.3,1) both;
+  }
+  .tier-card:nth-child(1) { animation-delay: .05s; }
+  .tier-card:nth-child(2) { animation-delay: .16s; }
+  .tier-card:nth-child(3) { animation-delay: .28s; }
+  @keyframes tierIn { from { opacity: 0; transform: translateY(22px) scale(.97); } to { opacity: 1; transform: none; } }
+  .tier-card::after {
+    content: ""; position: absolute; top: -42%; left: 50%; transform: translateX(-50%);
+    width: 88%; height: 150px; filter: blur(36px); pointer-events: none; opacity: .55;
+  }
+  .tier-card > * { position: relative; z-index: 1; }
+  .tier-card:hover { transform: translateY(-6px); }
+  .tier-member { border-color: rgba(148,163,184,.28); }
+  .tier-member::after { background: radial-gradient(ellipse at center, rgba(148,163,184,.18), transparent 70%); }
+  .tier-member:hover { box-shadow: 0 24px 60px rgba(8,5,24,.55), 0 0 40px rgba(148,163,184,.15); }
+  .tier-booster { border-color: rgba(236,72,153,.45); background: linear-gradient(180deg, rgba(88,28,60,.5), rgba(10,8,26,.87)); }
+  .tier-booster::after { background: radial-gradient(ellipse at center, rgba(236,72,153,.2), transparent 70%); }
+  .tier-booster:hover { box-shadow: 0 24px 60px rgba(8,5,24,.55), 0 0 44px rgba(236,72,153,.2); }
+  .tier-member::before { content: ""; position: absolute; top: 0; left: 10%; right: 10%; height: 2px; background: linear-gradient(90deg, transparent, #94a3b8, transparent); }
+  .tier-booster::before { content: ""; position: absolute; top: 0; left: 10%; right: 10%; height: 2px; background: linear-gradient(90deg, transparent, #ec4899, transparent); }
+  .tier-vip {
+    border-color: rgba(168,85,247,.65);
+    background: linear-gradient(180deg, rgba(76,29,149,.55), rgba(23,7,49,.94));
+    box-shadow: 0 24px 60px rgba(139,92,246,.3), 0 0 70px rgba(139,92,246,.22), inset 0 0 40px rgba(139,92,246,.07);
+    z-index: 3;
+  }
+  .tier-vip:hover { transform: translateY(-6px) scale(1.03); box-shadow: 0 30px 70px rgba(139,92,246,.4), 0 0 100px rgba(168,85,247,.32), inset 0 0 40px rgba(139,92,246,.09); }
+  .tier-vip::after { background: radial-gradient(ellipse at center, rgba(168,85,247,.3), transparent 70%); opacity: .85; }
+  .tier-vip::before {
+    content: ""; position: absolute; inset: -45%;
+    background: conic-gradient(from 0deg,
+      transparent 0deg 300deg,
+      rgba(232,121,249,.17) 330deg,
+      rgba(251,191,36,.14) 345deg,
+      rgba(232,121,249,.2) 358deg,
+      transparent 360deg);
+    animation: tierVipRing 4s linear infinite;
+    pointer-events: none; z-index: 0;
+  }
+  @keyframes tierVipRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .tier-badge {
+    position: absolute; top: 15px; right: -36px; transform: rotate(38deg);
+    background: linear-gradient(135deg, #d946ef, #a855f7 60%, #7c3aed);
+    background-size: 200% auto;
+    animation: badgeFlow 3.4s linear infinite;
+    color: #fff; font-size: 10px; font-weight: 800; letter-spacing: .16em;
+    padding: 6px 40px; box-shadow: 0 6px 22px rgba(217,70,239,.55), 0 0 16px rgba(217,70,239,.4);
+    z-index: 2;
+  }
+  @keyframes badgeFlow { to { background-position: 200% center; } }
+  .spark { position: absolute; border-radius: 50%; pointer-events: none; z-index: 2; }
+  .spark.s1 { top: 17%; left: 15%; width: 5px; height: 5px; background: #fcd34d; box-shadow: 0 0 9px 2px rgba(251,191,36,.7); animation: twinkle 2.4s ease-in-out infinite; }
+  .spark.s2 { top: 31%; right: 16%; width: 4px; height: 4px; background: #f0abfc; box-shadow: 0 0 9px 2px rgba(217,70,239,.7); animation: twinkle 3.1s 1.2s ease-in-out infinite; }
+  .spark.s3 { bottom: 36%; left: 24%; width: 4px; height: 4px; background: #fcd34d; box-shadow: 0 0 9px 2px rgba(251,191,36,.6); animation: twinkle 2.8s .6s ease-in-out infinite; }
+  @keyframes twinkle { 0%, 100% { opacity: .12; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.2); } }
+  .tier-head { display: flex; flex-direction: column; gap: 3px; }
+  .tier-ic { width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; }
+  .tier-ic-member { background: linear-gradient(145deg, #334155, #1e293b); border: 1px solid rgba(148,163,184,.45); color: #cbd5e1; box-shadow: 0 10px 24px rgba(148,163,184,.18), inset 0 1px 0 rgba(255,255,255,.12); }
+  .tier-ic-booster { background: linear-gradient(145deg, #9d174d, #4c0519); border: 1px solid rgba(236,72,153,.5); color: #f9a8d4; box-shadow: 0 10px 24px rgba(236,72,153,.28), inset 0 1px 0 rgba(255,255,255,.12); }
+  .tier-ic-vip { background: linear-gradient(145deg, #6d28d9, #2e1065 70%, #7c3aed); border: 1px solid rgba(168,85,247,.6); color: #f0abfc; box-shadow: 0 10px 26px rgba(139,92,246,.4), 0 0 18px rgba(217,70,239,.3), inset 0 1px 0 rgba(255,255,255,.16); }
+  .tier-card:hover .tier-ic { animation: icWiggle .5s ease; }
+  @keyframes icWiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-8deg) scale(1.06); } 60% { transform: rotate(6deg) scale(1.03); } }
+  .tier-name { font-family: var(--sans); font-size: 15px; font-weight: 800; letter-spacing: .14em; color: #f5f3ff; }
+  .tier-tag { font-size: 12px; color: var(--lp-dim); line-height: 1.5; }
+  .tier-price {
+    font-family: var(--sans); font-weight: 800; line-height: 1;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    min-height: 46px; white-space: nowrap;
+    font-size: clamp(22px, 12.5cqi, 40px);
+  }
+  .tier-price span { font-size: 12.5px; color: var(--lp-dim); font-weight: 600; margin-left: 4px; letter-spacing: .02em; }
+  .tier-member .tier-price { background: linear-gradient(180deg, #f1f5f9, #94a3b8); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .tier-booster .tier-price { background: linear-gradient(180deg, #fbcfe8, #db2777); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+  .tier-vip .tier-price {
+    background: linear-gradient(90deg, #c084fc, #e879f9 30%, #fcd34d 50%, #e879f9 70%, #c084fc);
+    background-size: 220% auto;
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+    animation: txtShimmer 3.2s linear infinite;
+  }
+  @keyframes txtShimmer { 0% { background-position: 0% 50%; } 100% { background-position: 220% 50%; } }
+  .tier-list { list-style: none; margin: 4px 0 6px; padding: 0; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+  .tier-list li { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--lp-dim); line-height: 1.35; }
+  .tier-list li::before { content: ""; width: 18px; height: 18px; border-radius: 50%; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; font-family: var(--sans); }
+  .tier-list li.ok::before { content: "✓"; color: #34d97b; background: rgba(52,217,123,.12); border: 1px solid rgba(52,217,123,.35); }
+  .tier-list li.no::before { content: "—"; color: #6b6390; background: rgba(255,255,255,.05); border: 1px solid rgba(196,181,253,.15); }
+  .tier-vip .tier-list li.ok::before { border-color: rgba(168,85,247,.5); color: #e879f9; background: rgba(168,85,247,.14); box-shadow: 0 0 10px rgba(168,85,247,.35); }
+  .tier-card:hover .tier-list li { animation: liIn .45s cubic-bezier(.2,.7,.3,1) both; }
+  .tier-card:hover .tier-list li:nth-child(1) { animation-delay: .02s; }
+  .tier-card:hover .tier-list li:nth-child(2) { animation-delay: .07s; }
+  .tier-card:hover .tier-list li:nth-child(3) { animation-delay: .12s; }
+  .tier-card:hover .tier-list li:nth-child(4) { animation-delay: .17s; }
+  .tier-card:hover .tier-list li:nth-child(5) { animation-delay: .22s; }
+  @keyframes liIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: none; } }
+  .tier-card:hover .tier-list li::before { animation: ckPop .35s cubic-bezier(.2,.7,.3,1) both; animation-delay: inherit; }
+  @keyframes ckPop { from { transform: scale(0) rotate(-90deg); } to { transform: scale(1) rotate(0); } }
+  .tier-cta {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    text-align: center; padding: 13px 16px; border-radius: 13px;
+    font-family: var(--sans); font-size: 13px; font-weight: 800; letter-spacing: .1em;
+    text-decoration: none; transition: transform .15s, box-shadow .15s; margin-top: auto;
+    position: relative; overflow: hidden;
+  }
+  .tier-cta svg { flex-shrink: 0; }
+  .tier-cta::after {
+    content: ""; position: absolute; top: 0; bottom: 0; left: -80%; width: 55%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,.22), transparent);
+    transform: skewX(-20deg); animation: ctaShine 4s ease-in-out infinite; pointer-events: none;
+  }
+  .tier-cta.tier-vip::after { background: linear-gradient(90deg, transparent, rgba(255,255,255,.45), transparent); animation-duration: 3.4s; }
+  @keyframes ctaShine { 0% { left: -80%; } 55%, 100% { left: 160%; } }
+  .tier-cta.tier-member { background: rgba(148,163,184,.14); border: 1px solid rgba(148,163,184,.45); color: #e2e8f0; }
+  .tier-cta.tier-booster { background: linear-gradient(135deg, #db2777, #ec4899); border: 1px solid rgba(249,168,212,.35); color: #fff; box-shadow: 0 10px 26px rgba(236,72,153,.35); }
+  .tier-cta.tier-vip { background: linear-gradient(135deg, #6d28d9, #9333ea 45%, #c084fc); border: 1px solid rgba(233,213,255,.4); color: #fff; box-shadow: 0 12px 32px rgba(139,92,246,.45); }
+  .tier-cta:hover { transform: translateY(-2px); filter: brightness(1.07); }
+  .tier-cta.tier-member:hover { box-shadow: 0 10px 26px rgba(148,163,184,.25); }
+  .tier-cta.tier-booster:hover { box-shadow: 0 14px 32px rgba(236,72,153,.5); }
+  .tier-cta.tier-vip:hover { box-shadow: 0 16px 36px rgba(139,92,246,.6); }
+  .tier-note { font-size: 11px; color: var(--lp-dim); text-align: center; margin-top: 10px; line-height: 1.5; }
+
+  /* ---- promoter program box ---- */
+  .promo-box {
+    position: relative; margin: 18px auto 0; max-width: 980px;
+    border-radius: 22px; padding: 22px 24px;
+    border: 1px solid rgba(245,158,11,.5);
+    background:
+      linear-gradient(180deg, rgba(88,58,5,.26), rgba(22,15,3,.48)) padding-box,
+      linear-gradient(120deg, rgba(245,158,11,.75), rgba(251,191,36,.12) 40%, rgba(245,158,11,.75)) border-box;
+    box-shadow: 0 20px 50px rgba(8,5,24,.5), 0 0 50px rgba(245,158,11,.14), inset 0 1px 0 rgba(255,255,255,.06);
+    overflow: hidden;
+    animation: tierIn .7s .38s cubic-bezier(.2,.7,.3,1) both;
+  }
+  .promo-box::before { content: ""; position: absolute; top: 0; left: 10%; right: 10%; height: 2px; background: linear-gradient(90deg, transparent, #fcd34d, transparent); box-shadow: 0 0 14px rgba(245,158,11,.5); }
+  .promo-box::after {
+    content: ""; position: absolute; top: 0; bottom: 0; left: -80%; width: 45%;
+    background: linear-gradient(90deg, transparent, rgba(252,211,77,.13), transparent);
+    transform: skewX(-20deg); animation: promoShine 4.2s ease-in-out infinite; pointer-events: none;
+  }
+  @keyframes promoShine { 0%, 40% { left: -80%; } 100% { left: 150%; } }
+  .promo-grid { position: relative; z-index: 1; display: grid; grid-template-columns: auto 1fr auto; gap: 20px; align-items: center; }
+  .promo-ico {
+    width: 52px; height: 52px; border-radius: 15px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(145deg, #b45309, #f59e0b 55%, #fcd34d); color: #1c1203;
+    box-shadow: 0 10px 26px rgba(245,158,11,.45), 0 0 18px rgba(251,191,36,.35);
+    animation: icoPulse 2.6s ease-in-out infinite;
+  }
+  @keyframes icoPulse { 0%, 100% { box-shadow: 0 10px 26px rgba(245,158,11,.45), 0 0 18px rgba(251,191,36,.35); } 50% { box-shadow: 0 10px 30px rgba(245,158,11,.62), 0 0 32px rgba(251,191,36,.55); } }
+  .promo-title {
+    font-family: var(--sans); font-size: 17px; font-weight: 800; letter-spacing: .12em;
+    display: flex; align-items: center; gap: 10px;
+    background: linear-gradient(90deg, #fcd34d, #fbbf24 55%, #fde68a);
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .promo-tag { flex: none; -webkit-text-fill-color: #052e16; color: #052e16; background: linear-gradient(135deg, #16a34a, #22c55e); padding: 3px 10px; border-radius: 999px; font-size: 9px; font-weight: 800; letter-spacing: .16em; box-shadow: 0 4px 12px rgba(34,197,94,.4); }
+  .promo-tagline { font-size: 12.5px; color: var(--lp-dim); margin-top: 4px; line-height: 1.55; }
+  .promo-tagline b { color: #fde68a; font-weight: 700; }
+  .promo-chips { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 620px; margin: 18px auto 0; }
+  .promo-chip { font-size: 10.5px; font-weight: 800; letter-spacing: .08em; color: #fcd34d; background: rgba(245,158,11,.1); border: 1px solid rgba(245,158,11,.4); padding: 8px 12px; border-radius: 999px; box-shadow: inset 0 0 14px rgba(245,158,11,.06); text-align: center; white-space: nowrap; }
+  .promo-cta {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 13px 20px; border-radius: 13px;
+    font-family: var(--sans); font-size: 12.5px; font-weight: 800; letter-spacing: .1em;
+    text-decoration: none; color: #1c1203;
+    background: linear-gradient(135deg, #f59e0b, #fbbf24 55%, #fde68a);
+    border: 1px solid rgba(255,255,255,.35);
+    box-shadow: 0 12px 30px rgba(245,158,11,.4), 0 0 22px rgba(251,191,36,.3);
+    position: relative; overflow: hidden;
+    justify-self: end;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .promo-cta::after { content: ""; position: absolute; top: 0; bottom: 0; left: -80%; width: 50%; background: linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent); transform: skewX(-20deg); animation: ctaShine 3.2s ease-in-out infinite; pointer-events: none; }
+  .promo-cta:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(245,158,11,.55), 0 0 30px rgba(251,191,36,.45); }
+  .promo-steps {
+    position: relative; z-index: 1;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+    margin-top: 16px; padding-top: 14px;
+    border-top: 1px dashed rgba(245,158,11,.3);
+  }
+  .promo-step { display: flex; align-items: center; gap: 9px; font-size: 11.5px; color: var(--lp-dim); }
+  .promo-step b { background: linear-gradient(135deg, #b45309, #f59e0b 55%, #fcd34d); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800; }
+  .promo-step .ps-num {
+    flex: none; width: 26px; height: 26px; display: flex; align-items: center; justify-content: center;
+    border-radius: 50%; font-family: var(--sans); font-size: 11px; font-weight: 800; color: #1c1203;
+    background: linear-gradient(135deg, #b45309, #f59e0b 55%, #fcd34d);
+    box-shadow: 0 4px 14px rgba(245,158,11,.4);
+  }
+  .promo-arrow { color: #8a6d1d; font-size: 14px; flex: none; font-weight: 800; }
+
+  .tier-cmp-wrap { max-width: 820px; margin: 40px auto 0; }
+  .cmp-label { text-align: center; margin-bottom: 16px; }
+  .tier-cmp-box { border: 1px solid rgba(168,85,247,.22); border-radius: 16px; overflow: hidden; background: rgba(20,15,46,.6); }
+  .tier-cmp { width: 100%; border-collapse: collapse; }
+  .tier-cmp th, .tier-cmp td { padding: 12px 14px; text-align: center; font-size: 13px; border-bottom: 1px solid rgba(196,181,253,.1); color: var(--lp-dim); }
+  .tier-cmp th { font-family: var(--sans); font-size: 12px; font-weight: 800; letter-spacing: .1em; color: #f5f3ff; background: rgba(139,92,246,.12); }
+  .tier-cmp td:first-child { text-align: left; font-weight: 600; color: #e9d5ff; }
+  .tier-cmp tr:last-child td { border-bottom: 0; }
+  .tier-cmp .c-member { color: #94a3b8; font-weight: 700; }
+  .tier-cmp .c-booster { color: #f472b6; font-weight: 700; }
+  .tier-cmp .c-vip { color: #c084fc; font-weight: 700; }
+  .tier-cmp .c-promoter { color: #fcd34d; font-weight: 700; }
+  .tier-cmp .c-d1 { color: #94a3b8; }
+  .tier-cmp .c-d2 { color: #f9a8d4; }
+  .tier-cmp .c-d3 { color: #c084fc; font-weight: 700; }
+  .tier-cmp .c-d4 { color: #fcd34d; font-weight: 700; }
+  .tier-cmp .c-pill { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 999px; background: linear-gradient(135deg, #6d28d9, #9333ea 45%, #c084fc); border: 1px solid rgba(233,213,255,.35); color: #fff; font-size: 11.5px; font-weight: 800; letter-spacing: .04em; box-shadow: 0 4px 16px rgba(139,92,246,.35); }
+  .tier-cmp .c-pill.gold { background: linear-gradient(135deg, #b45309, #f59e0b 55%, #fcd34d); border-color: rgba(252,211,77,.5); box-shadow: 0 4px 16px rgba(245,158,11,.4); }
+  .lp-faq { max-width: 640px; margin: 0 auto; }
+  .lp-qa { background: rgba(20,15,46,.55); border: 1px solid rgba(168,85,247,.2); border-radius: 16px; padding: 18px 20px; margin-bottom: 12px; transition: border-color .25s, background .25s; }
+  .lp-qa:hover { border-color: rgba(168,85,247,.5); background: rgba(20,15,46,.72); }
+  .lp-qa b { font-family: var(--sans); font-size: 14px; color: #f5f3ff; display: block; margin-bottom: 7px; }
+  .lp-qa span { font-size: 13px; color: var(--lp-dim); line-height: 1.65; display: block; }
+  .lp-foot { margin-top: 50px; padding: 28px 0 40px; border-top: 1px solid rgba(196,181,253,.18); text-align: center; }
+  .lp-foot-links { display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .lp-foot-links a { color: var(--lp-dim); text-decoration: none; font-size: 12.5px; transition: color .2s; }
+  .lp-foot-links a:hover { color: var(--lp-v2); }
+  .lp-cp { font-size: 11.5px; color: rgba(169,161,212,.65); line-height: 1.7; color: #f5f3ff; }
+  @media (max-width: 900px) {
+    .lp-feat-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .lp-stats-grid { grid-template-columns: repeat(2,1fr); }
+    .lp-feat-grid { grid-template-columns: 1fr; }
+    .lp-steps { grid-template-columns: 1fr; }
+    .tier-grid { grid-template-columns: 1fr; }
+    .promo-grid { grid-template-columns: 1fr; gap: 12px; }
+    .promo-ico { margin: 0 auto; }
+    .promo-title { justify-content: center; }
+    .promo-tagline { text-align: center; }
+    .promo-chips { max-width: none; margin-top: 12px; }
+    .promo-cta { width: 100%; justify-self: stretch; }
+    .promo-steps { flex-direction: column; align-items: flex-start; }
+    .promo-arrow { transform: rotate(90deg); }
+    .lp-nav { gap: 8px; }
+    .lp-nav .lp-hide-m { display: none; }
+  }
+
+  /* ---------- free vip claim modal ---------- */
+  .fv-overlay {
+    position: fixed; inset: 0; z-index: 2000; display: none;
+    align-items: center; justify-content: center; padding: 20px;
+    background: rgba(9,5,22,.68);
+    -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
+    animation: fvFade .35s ease both;
+  }
+  .fv-overlay.open { display: flex; }
+  .fv-card {
+    position: relative; width: min(460px, 100%);
+    background: linear-gradient(165deg, rgba(41,29,10,.94), rgba(20,13,6,.97));
+    border: 1px solid rgba(252,211,77,.35);
+    border-radius: 26px; padding: 40px 30px 28px; text-align: center;
+    overflow: hidden;
+    box-shadow: 0 0 0 1px rgba(252,211,77,.12) inset, 0 0 60px rgba(245,158,11,.16), 0 30px 90px rgba(0,0,0,.6);
+    animation: fvPop .5s cubic-bezier(.2,.9,.3,1.15) both;
+  }
+  .fv-card::before {
+    content: ''; position: absolute; inset: -70% -35% auto -35%; height: 150%;
+    background: conic-gradient(from 0deg, transparent 0deg, rgba(252,211,77,.16) 60deg, transparent 120deg, transparent 180deg, rgba(251,191,36,.12) 240deg, transparent 300deg, transparent 360deg);
+    animation: fvRing 8s linear infinite; pointer-events: none;
+  }
+  .fv-card::after {
+    content: ''; position: absolute; inset: 0; border-radius: 26px; padding: 1px;
+    background: linear-gradient(120deg, rgba(252,211,77,.7), rgba(255,255,255,.16) 30%, rgba(245,158,11,.5) 60%, rgba(252,211,77,.75));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    pointer-events: none;
+  }
+  .fv-shine {
+    position: absolute; top: 0; left: -80%; width: 55%; height: 2px;
+    background: linear-gradient(90deg, transparent, #fff, transparent);
+    filter: drop-shadow(0 0 6px rgba(252,211,77,.8));
+    animation: fvSweep 3.4s ease-in-out infinite;
+  }
+  .fv-sp { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #fcd34d; filter: blur(.5px); animation: fvTw 2.4s ease-in-out infinite; }
+  .fv-sp.s1 { top: 26%; left: 16%; }
+  .fv-sp.s2 { top: 64%; right: 14%; animation-delay: .8s; width: 3px; height: 3px; }
+  .fv-sp.s3 { bottom: 24%; left: 22%; animation-delay: 1.5s; }
+  .fv-crown {
+    position: relative; width: 96px; height: 96px; margin: 0 auto 4px;
+    display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(circle at 50% 38%, rgba(252,211,77,.3), rgba(245,158,11,.07) 64%, transparent 74%);
+    animation: fvBob 3.2s ease-in-out infinite;
+  }
+  .fv-crown svg { width: 54px; height: 54px; filter: drop-shadow(0 4px 18px rgba(245,158,11,.55)); animation: fvGlow 2.6s ease-in-out infinite; }
+  .fv-kicker { font-size: 10.5px; font-weight: 800; letter-spacing: .34em; color: #fbbf24; text-transform: uppercase; margin-bottom: 10px; }
+  .fv-title {
+    font-family: var(--sans); font-size: 27px; font-weight: 800; line-height: 1.15;
+    background: linear-gradient(100deg, #fde68a 0%, #fcd34d 35%, #fff7d6 50%, #f59e0b 70%, #fcd34d 100%);
+    background-size: 220% 100%; -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; animation: fvShimmer 5s linear infinite;
+    margin-bottom: 8px;
+  }
+  .fv-sub { font-size: 13px; color: #d8cfa9; line-height: 1.6; margin-bottom: 18px; }
+  .fv-sub b { color: #fff; font-weight: 700; }
+  .fv-perks { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 20px; }
+  .fv-perk {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 13px; border-radius: 999px; font-size: 12px; font-weight: 700; color: #ffe9a8;
+    background: rgba(252,211,77,.07); border: 1px solid rgba(252,211,77,.25);
+    animation: fvPerkIn .5s ease both;
+  }
+  .fv-perk:nth-child(2) { animation-delay: .12s; }
+  .fv-perk:nth-child(3) { animation-delay: .24s; }
+  .fv-perk svg { width: 12px; height: 12px; flex-shrink: 0; }
+  .fv-clock-lab { font-size: 10px; font-weight: 800; letter-spacing: .26em; color: #a8925f; text-transform: uppercase; margin-bottom: 10px; }
+  .fv-clock { display: flex; gap: 10px; justify-content: center; margin-bottom: 14px; }
+  .fv-cd {
+    position: relative; width: 76px; padding: 12px 6px 10px; border-radius: 16px;
+    background: rgba(0,0,0,.35); border: 1px solid rgba(252,211,77,.22); overflow: hidden;
+  }
+  .fv-cd::before {
+    content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, #fcd34d, transparent);
+    animation: fvCdGlow 2s ease-in-out infinite;
+  }
+  .fv-cd b { display: block; font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; color: #fff; line-height: 1; text-shadow: 0 0 18px rgba(252,211,77,.5); }
+  .fv-cd i { display: block; margin-top: 6px; font-style: normal; font-size: 9px; font-weight: 800; letter-spacing: .18em; color: #a8925f; text-transform: uppercase; }
+  .fv-ends {
+    display: inline-flex; align-items: center; gap: 7px; margin-bottom: 20px;
+    padding: 7px 14px; border-radius: 999px; font-size: 11.5px; font-weight: 700; color: #ffe9a8;
+    background: rgba(252,211,77,.08); border: 1px solid rgba(252,211,77,.28);
+  }
+  .fv-ends .ld { width: 6px; height: 6px; border-radius: 50%; background: #34d97b; box-shadow: 0 0 10px #34d97b; animation: fvPulse 1.6s ease-in-out infinite; }
+  .fv-cta {
+    position: relative; display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; padding: 16px 20px; border: none; border-radius: 16px; cursor: pointer;
+    font-family: var(--sans); font-size: 15.5px; font-weight: 800; letter-spacing: .04em; color: #241a02;
+    background: linear-gradient(120deg, #fde68a, #fcd34d 40%, #f59e0b 90%);
+    box-shadow: 0 10px 30px rgba(245,158,11,.35), inset 0 1px 0 rgba(255,255,255,.5);
+    overflow: hidden; transition: transform .15s, box-shadow .2s;
+  }
+  .fv-cta:hover { transform: translateY(-2px); box-shadow: 0 16px 42px rgba(245,158,11,.5), inset 0 1px 0 rgba(255,255,255,.5); }
+  .fv-cta:active { transform: scale(.97); }
+  .fv-cta::after {
+    content: ''; position: absolute; top: 0; left: -70%; width: 45%; height: 100%;
+    background: linear-gradient(100deg, transparent, rgba(255,255,255,.7), transparent);
+    transform: skewX(-20deg); animation: fvCtaShine 2.6s ease-in-out infinite;
+  }
+  .fv-foot { margin-top: 14px; font-size: 10.5px; color: #8a7a4f; line-height: 1.5; }
+  .fv-foot b { color: #cbb277; }
+  @keyframes fvFade { from { opacity: 0; } }
+  @keyframes fvPop { from { opacity: 0; transform: scale(.9) translateY(18px); filter: blur(4px); } to { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } }
+  @keyframes fvRing { to { transform: rotate(360deg); } }
+  @keyframes fvSweep { 0% { left: -80%; } 55% { left: 130%; } 100% { left: 130%; } }
+  @keyframes fvTw { 0%,100% { opacity: .2; transform: scale(.7); } 50% { opacity: 1; transform: scale(1.4); } }
+  @keyframes fvBob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-7px); } }
+  @keyframes fvGlow { 0%,100% { filter: drop-shadow(0 4px 14px rgba(245,158,11,.45)); } 50% { filter: drop-shadow(0 4px 26px rgba(252,211,77,.85)); } }
+  @keyframes fvShimmer { to { background-position: -220% 0; } }
+  @keyframes fvPerkIn { from { opacity: 0; transform: translateY(8px); } }
+  @keyframes fvCdGlow { 0%,100% { opacity: .35; } 50% { opacity: 1; } }
+  @keyframes fvPulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  @keyframes fvCtaShine { 0% { left: -70%; } 60% { left: 130%; } 100% { left: 130%; } }
+  @media (max-width: 520px) {
+    .fv-card { padding: 32px 18px 24px; }
+    .fv-cd { width: 66px; }
+    .fv-cd b { font-size: 25px; }
+    .fv-title { font-size: 22px; }
+  }
+
+  /* maintenance mode banner */
+  .maint-banner {
+    display: none;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 18px;
+    margin: 10px auto 0;
+    max-width: 1080px;
+    border-radius: 14px;
+    background: linear-gradient(135deg, rgba(120,53,15,.25), rgba(180,83,9,.18));
+    border: 1px solid rgba(251,191,36,.45);
+    box-shadow: 0 0 24px rgba(245,158,11,.12);
+    animation: fvPerkIn .45s ease both;
+  }
+  .maint-banner.maint-on { display: flex; }
+  .maint-banner .maint-ico {
+    flex: none;
+    width: 34px; height: 34px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #f59e0b, #d97706);
+    color: #1c1003;
+  }
+  .maint-banner .maint-in { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .maint-banner .maint-in b {
+    font-size: 12px; letter-spacing: .14em; color: #fcd34d;
+    display: flex; align-items: center; gap: 7px;
+  }
+  .maint-banner .maint-in b::before {
+    content: ''; width: 8px; height: 8px; border-radius: 50%;
+    background: #fbbf24; box-shadow: 0 0 10px #fbbf24;
+    animation: fvPulse 1.6s infinite;
+  }
+  .maint-banner .maint-in span { font-size: 13.5px; color: #fde68a; line-height: 1.45; }
+  @media (max-width: 720px) {
+    .maint-banner { margin: 8px 10px 0; padding: 10px 12px; }
+    .maint-banner .maint-in span { font-size: 12.5px; }
+  }
+
+</style>
+<style>
+/* ============ PREX UI enhancements: theme / palette / toasts ============ */
+[data-theme="light"]{
+  --bg:#f6f5fb;
+  --bg-2:#efeafb;
+  --panel:rgba(124,58,237,.05);
+  --panel-solid:#ffffff;
+  --border:rgba(124,58,237,.22);
+  --border-soft:rgba(124,58,237,.14);
+  --surface-1:rgba(124,58,237,.06);
+  --surface-2:rgba(124,58,237,.10);
+  --surface-3:rgba(124,58,237,.16);
+  --text:#1b1630;
+  --text-2:#3a3357;
+  --muted:#6b6390;
+  --shadow-sm:0 4px 18px rgba(80,60,160,.10);
+  --shadow-md:0 10px 34px rgba(80,60,160,.14);
+  --shadow-lg:0 22px 64px rgba(80,60,160,.18);
+}
+[data-theme="light"] body{ background:var(--bg); color:var(--text); }
+[data-theme="light"] .header{
+  background-image:linear-gradient(rgba(255,255,255,.86),rgba(255,255,255,.86)),linear-gradient(90deg,#7c3aed,#d946ef,#22d3ee,#a855f7,#7c3aed);
+  box-shadow:0 10px 40px rgba(124,58,237,.10);
+}
+[data-theme="light"] body::before{ background:radial-gradient(circle,rgba(124,58,237,.20),transparent 65%); }
+[data-theme="light"] body::after{ background:radial-gradient(circle,rgba(217,70,239,.12),transparent 65%); }
+[data-theme="light"] .noise{ opacity:.02; }
+[data-theme="light"] .app-grid{ background-image:linear-gradient(rgba(0,0,0,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.03) 1px,transparent 1px); }
+[data-theme="light"] .dash-stat{ background:rgba(124,58,237,.05); border-color:rgba(124,58,237,.20); }
+[data-theme="light"] .dash-stat .dash-cap{ color:#7a7299; }
+[data-theme="light"] .recent-row{ border-color:rgba(124,58,237,.12); }
+[data-theme="light"] .lp-glow{ opacity:.16; }
+
+/* Floating action buttons */
+.ui-fab{
+  position:fixed; right:18px; z-index:9999;
+  width:44px; height:44px; border-radius:14px;
+  display:flex; align-items:center; justify-content:center;
+  cursor:pointer; border:1px solid var(--border);
+  background:var(--panel-solid); color:var(--text);
+  box-shadow:var(--shadow-md);
+  -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px);
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.ui-fab:hover{ transform:translateY(-2px); border-color:var(--violet); box-shadow:var(--shadow-lg); }
+.ui-fab:active{ transform:translateY(0) scale(.96); }
+.ui-theme-btn{ bottom:18px; }
+.ui-palette-btn{ bottom:70px; }
+.ui-theme-ico{ width:20px; height:20px; display:block; pointer-events:none; }
+.ui-theme-btn[data-theme="light"] .ui-theme-ico{ background:transparent; box-shadow:inset -6px -6px 0 0 #f59e0b; border-radius:50%; }
+.ui-theme-btn[data-theme="dark"] .ui-theme-ico{ background:transparent; box-shadow:inset 0 0 0 2px #c4b5fd; border-radius:50%; }
+.ui-theme-btn[data-theme="system"] .ui-theme-ico{ background:linear-gradient(135deg,#7c3aed,#22d3ee); border-radius:50%; }
+
+/* Command palette */
+.ui-cmdk{
+  position:fixed; inset:0; z-index:10000; display:none;
+  align-items:flex-start; justify-content:center;
+  background:rgba(7,6,15,.55); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  padding-top:14vh;
+}
+.ui-cmdk-box{
+  width:min(560px,92vw); max-height:70vh; overflow:hidden;
+  background:var(--panel-solid); border:1px solid var(--border);
+  border-radius:18px; box-shadow:var(--shadow-lg);
+  display:flex; flex-direction:column;
+}
+.ui-cmdk-input{
+  width:100%; border:0; outline:0; padding:16px 18px;
+  background:transparent; color:var(--text); font-size:15px; font-family:var(--body);
+  border-bottom:1px solid var(--border-soft);
+}
+.ui-cmdk-input::placeholder{ color:var(--muted); }
+.ui-cmdk-list{ overflow-y:auto; padding:8px; }
+.ui-cmdk-item{
+  padding:11px 14px; border-radius:11px; cursor:pointer; font-size:14px; color:var(--text-2);
+  display:flex; align-items:center; gap:10px;
+}
+.ui-cmdk-item.active{ background:var(--surface-2); color:var(--text); }
+.ui-cmdk-empty{ padding:18px; text-align:center; color:var(--muted); font-size:14px; }
+.ui-cmdk-hint{ padding:9px 16px; font-size:11px; color:var(--muted); border-top:1px solid var(--border-soft); letter-spacing:.03em; }
+
+/* Toasts */
+.ui-toast-wrap{ position:fixed; left:50%; bottom:24px; transform:translateX(-50%); z-index:10001; display:flex; flex-direction:column; gap:10px; align-items:center; pointer-events:none; }
+.ui-toast{
+  pointer-events:auto; padding:11px 18px; border-radius:12px; font-size:13.5px; font-weight:600;
+  background:var(--panel-solid); color:var(--text); border:1px solid var(--border);
+  box-shadow:var(--shadow-md); opacity:0; transform:translateY(10px);
+  transition:opacity .25s ease, transform .25s ease;
+}
+.ui-toast.show{ opacity:1; transform:translateY(0); }
+.ui-toast-error{ border-color:var(--red); color:#ffd7df; }
+.ui-toast-success{ border-color:var(--green); color:#c8f7da; }
+
+@media (prefers-reduced-motion: reduce){
+  .ui-fab, .ui-toast{ transition:none; }
+}
+@media (max-width:480px){
+  .ui-fab{ width:40px; height:40px; right:12px; }
+  .ui-theme-btn{ bottom:12px; }
+  .ui-palette-btn{ bottom:60px; }
+}
+
+</style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-slate-950">
+<body>
 
-    <!-- Header -->
-    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center gap-3">
-                <div class="p-2 bg-brand-500/10 text-brand-500 rounded-lg border border-brand-500/20">
-                    <i class="fa-solid fa-moon text-xl"></i>
-                </div>
-                <div>
-                    <h1 class="font-bold text-lg tracking-wide text-white">MOON METHOD</h1>
-                    <p class="text-xs text-slate-400">MOON METHOD Core Processing System</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-                    MOON METHOD Active
-                </span>
-            </div>
+<div class="app-grid"></div>
+<div class="noise"></div>
+
+<div id="studio-shell">
+<div class="drag-overlay" id="drag-overlay">
+  <div class="do-box">
+    <svg width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4m0 0 5 5m-5-5-5 5"/><path d="M4 20h16"/></svg>
+    <div class="do-title">Drop to optimize</div>
+    <div class="do-sub">Release anywhere &middot; PREX restructures it instantly</div>
+  </div>
+</div>
+
+<header class="header">
+  <div class="hd-inner">
+    <div class="brand">
+      <img class="logo" src="logo.png" alt="PREX logo">
+      <div class="brand-text">
+        <div class="title">PREX OPTIMIZER</div>
+        <div class="sub">Uploads engineered to survive TikTok</div>
+      </div>
+    </div>
+    <div class="tb-right">
+      <span class="hd-avatar" id="hd-avatar" hidden title=""></span>
+      <div class="status-pill" id="net-status">ONLINE</div>
+      <span class="role-badge" id="role-badge" hidden>MASTER</span>
+      <a class="admin-chip" id="admin-chip" href="/admin" hidden>ADMIN</a>
+    </div>
+  </div>
+</header>
+
+<div class="maint-banner" id="maint-banner-studio" aria-live="polite">
+  <div class="maint-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4.5 4.5 0 0 0-5.4 0L3 10.5l3.6 6 6.3-4.2a4.5 4.5 0 0 0 0-5.4l1.8-1.6Z"/><path d="M21 13.5 13.5 21"/></svg></div>
+  <div class="maint-in">
+    <b>MAINTENANCE MODE</b>
+    <span id="maint-msg-studio"></span>
+  </div>
+</div>
+
+<nav class="tabbar" id="tabbar">
+  <div class="tabs" id="tabs">
+    <span class="tab-pill" id="tab-pill"></span>
+    <button class="tab active" id="tab-overview" data-tab="overview"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>Overview</button>
+    <button class="tab" id="tab-optimize" data-tab="optimize"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg>Optimizer</button>
+    <button class="tab" id="tab-check" data-tab="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>Check video</button>
+    <button class="tab" id="tab-extension" data-tab="extension"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 13.5V19a2 2 0 0 1-2 2h-2.5a1.6 1.6 0 0 0-3.2 0H9a2 2 0 0 1-2-2v-2.3a1.7 1.7 0 0 0 0-3.4V9a2 2 0 0 1 2-2h2.3a1.7 1.7 0 0 0 3.4 0H17a2 2 0 0 1 2 2v2.5a1.7 1.7 0 0 0 0 3.4Z"/></svg>Extension</button>
+    <button class="tab" id="tab-pricing" data-tab="pricing"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0l-7.2-7.2a2 2 0 0 1-.6-1.4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 1.4.6l7.2 7.2a2 2 0 0 1 0 2.8Z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>Plans</button>
+    <button class="tab" id="tab-guide" data-tab="guide"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 0 0 9-9V5l-9 2-9-2v7a9 9 0 0 0 9 9Z"/><path d="M12 7v14"/></svg>Guide</button>
+  </div>
+</nav>
+
+<section class="hero page-content-container">
+  <div class="hero-block active" id="hero-overview">
+    <img class="hero-logo" src="logo.png" alt="PREX logo">
+    <span class="hero-eyebrow">PREX METHOD</span>
+    <h1 class="hero-title">Overview</h1>
+    <p class="hero-sub">Studio activity at a glance — members, uploads and your own session, updated live.</p>
+    <div class="hero-pills">
+      <span class="hpill">Live stats</span>
+      <span class="hpill">Your account</span>
+      <span class="hpill">Upload counter</span>
+    </div>
+  </div>
+  <div class="hero-block" id="hero-optimize">
+    <img class="hero-logo" src="logo.png" alt="PREX logo">
+    <span class="hero-eyebrow">PREX METHOD</span>
+    <h1 class="hero-title">Optimizer</h1>
+    <p class="hero-sub">Drop a video and PREX restructures its container for maximum TikTok quality — no re-encoding, zero quality loss.</p>
+    <div class="hero-pills">
+      <span class="hpill">Byte-identical video</span>
+      <span class="hpill">No re-encoding</span>
+      <span class="hpill">Served full resolution</span>
+    </div>
+  </div>
+  <div class="hero-block" id="hero-check">
+    <img class="hero-logo" src="logo.png" alt="PREX logo">
+    <span class="hero-eyebrow">PREX CHECK</span>
+    <h1 class="hero-title">Check</h1>
+    <p class="hero-sub">Paste a TikTok video link and see exactly what TikTok is serving — resolution, bitrate and frame rate — to confirm your upload survived.</p>
+    <div class="hero-pills">
+      <span class="hpill">Served quality stats</span>
+      <span class="hpill">Confirm post upload</span>
+      <span class="hpill">Instant result</span>
+    </div>
+  </div>
+  <div class="hero-block" id="hero-extension">
+    <img class="hero-logo" src="logo.png" alt="PREX logo">
+    <span class="hero-eyebrow">PREX ANALYZER</span>
+    <h1 class="hero-title">Extension</h1>
+    <p class="hero-sub">A floating panel that sits on TikTok while you watch — real-time resolution, FPS, bitrate and buffer telemetry — with a one-click bridge back to the studio.</p>
+    <div class="hero-pills">
+      <span class="hpill">Real-time analyzer</span>
+      <span class="hpill">Free download</span>
+      <span class="hpill">Chrome &amp; Edge</span>
+    </div>
+  </div>
+  <div class="hero-block" id="hero-pricing">
+    <img class="hero-logo" src="logo.png" alt="PREX logo">
+    <span class="hero-eyebrow">PREX METHOD</span>
+    <h1 class="hero-title">Plans</h1>
+    <p class="hero-sub">Free to start, boost to grow, VIP for unlimited everything — 4K, 120fps and full support. Promoters get the VIP pass for free.</p>
+    <div class="hero-pills">
+      <span class="hpill">Free tier</span>
+      <span class="hpill">Pro perk</span>
+      <span class="hpill">VIP unlimited</span>
+    </div>
+  </div>
+  <div class="hero-block" id="hero-guide">
+    <img class="hero-logo" src="logo.png" alt="PREX logo">
+    <span class="hero-eyebrow">PREX GUIDE</span>
+    <h1 class="hero-title">Guide</h1>
+    <p class="hero-sub">The exact export settings per editor and the step-by-step upload path that keeps TikTok serving full resolution — everything you need, in one place.</p>
+    <div class="hero-pills">
+      <span class="hpill">Export settings</span>
+      <span class="hpill">Upload steps</span>
+      <span class="hpill">Quality checklist</span>
+    </div>
+  </div>
+</section>
+
+<main class="page-content-container">
+  <section id="pane-overview" class="pane active">
+    <div class="ov-decor" aria-hidden="true"></div>
+    <div class="card">
+      <div class="card-head" id="dash-profile-head">
+        <span style="display:flex;align-items:center;gap:10px;justify-content:center;">
+          <span class="dash-avatar" id="dash-avatar">U</span>
+          <div id="dash-name" style="font-weight:700;font-size:15px">User Name</div>
+        </span>
+        <div id="dash-role" style="font-size:11px;color:var(--dim)">—</div>
+        <span id="dash-tier" class="tier-chip">—</span>
+        <span class="acct-actions">
+          <a class="btn primary ov-cta" href="javascript:void(0)" onclick="document.getElementById('tab-optimize').click();return false;">
+            <svg class="ov-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.8 4.2L18 9l-4.2 1.8L12 15l-1.8-4.2L6 9l4.2-1.8z"/><path d="M19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9z"/></svg>
+            Optimize a video
+          </a>
+          <a class="btn ghost" href="/logout">
+            <svg class="ov-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg>
+            Sign out
+          </a>
+        </span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><svg class="ov-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg>Studio activity &middot; live</div>
+      <div class="dash-stats">
+        <div class="dash-stat">
+          <span class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="6" rx="8" ry="3"/><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"/></svg></span>
+          <div class="dash-num" id="d-size">—</div>
+          <div class="dash-cap">Total file size</div>
         </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        <!-- Left Column: Upload & Engine Settings -->
-        <div class="lg:col-span-7 space-y-6">
-            
-            <!-- File Drop Area -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-                <label class="block text-sm font-semibold text-slate-300 mb-3">ვიდეო ფაილის არჩევა</label>
-                <div id="dropZone" class="border-2 border-dashed border-slate-700 hover:border-brand-500 transition-colors rounded-xl p-8 text-center bg-slate-950/50 cursor-pointer group relative overflow-hidden">
-                    <input type="file" id="fileInput" accept="video/mp4,video/quicktime" class="hidden">
-                    <div class="space-y-3 relative z-10">
-                        <div class="w-14 h-14 bg-slate-800 text-slate-400 group-hover:text-brand-500 group-hover:bg-brand-500/10 rounded-full flex items-center justify-center mx-auto transition-all">
-                            <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
-                        </div>
-                        <div>
-                            <p class="text-slate-200 font-medium">ჩააგდეთ MP4 / MOV ფაილი აქ ან <span class="text-brand-500 underline">აირჩიეთ</span></p>
-                            <p class="text-xs text-slate-500 mt-1">MOON METHOD Client-Side Engine</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- File Info Badge -->
-                <div id="fileInfo" class="hidden mt-4 p-3 bg-slate-800/60 rounded-lg border border-slate-700 flex items-center justify-between">
-                    <div class="flex items-center space-x-3 overflow-hidden">
-                        <i class="fa-solid fa-file-video text-brand-500 text-xl"></i>
-                        <div class="truncate">
-                            <p id="fileName" class="text-sm font-medium text-slate-200 truncate">video.mp4</p>
-                            <p id="fileSize" class="text-xs text-slate-400">0 MB</p>
-                        </div>
-                    </div>
-                    <button id="removeFile" class="text-slate-400 hover:text-red-400 p-1">
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Configuration Panels -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
-                <h2 class="text-base font-semibold text-slate-200 flex items-center gap-2">
-                    <i class="fa-solid fa-gears text-brand-500"></i> MOON METHOD პარამეტრები
-                </h2>
-
-                <div class="space-y-4">
-                    <!-- MOON METHOD Module 1 -->
-                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
-                        <div class="flex items-center justify-between">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" id="enablePrex" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
-                                <span class="font-semibold text-sm text-slate-200">MOON METHOD - Density Engine</span>
-                            </label>
-                            <span class="text-xs text-slate-500">Ghost-FPS & Timescale</span>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-900">
-                            <div>
-                                <label class="text-xs text-slate-400 block mb-1">FPS Multiplier</label>
-                                <select id="prexMultiplier" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs p-2 text-slate-200 focus:border-brand-500 focus:outline-none">
-                                    <option value="2">2x Density</option>
-                                    <option value="5" selected>5x Density (Default)</option>
-                                    <option value="10">10x Density</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="text-xs text-slate-400 block mb-1">Timescale Normalization</label>
-                                <select id="prexTimescale" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs p-2 text-slate-200 focus:border-brand-500 focus:outline-none">
-                                    <option value="30000" selected>30000 Hz (Standard)</option>
-                                    <option value="60000">60000 Hz</option>
-                                    <option value="keep">უცვლელი</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- MOON METHOD Module 2 -->
-                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
-                        <div class="flex items-center justify-between">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" id="enableKrypton" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
-                                <span class="font-semibold text-sm text-slate-200">MOON METHOD - Metadata Sanitizer</span>
-                            </label>
-                            <span class="text-xs text-slate-500">Metadata & Track Injection</span>
-                        </div>
-                        <div class="space-y-2 pt-2 border-t border-slate-900">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" id="sanitizeSignatures" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
-                                <span class="text-xs text-slate-300">ენკოდერების ხელმოწერების გასუფთავება</span>
-                            </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" id="injectAacClone" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
-                                <span class="text-xs text-slate-300">AAC Clone ტრეკის დამატება</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <!-- MOON METHOD Module 3 -->
-                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
-                        <div class="flex items-center justify-between">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" id="enableInflate" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
-                                <span class="font-semibold text-sm text-slate-200">MOON METHOD - Stream Optimizer</span>
-                            </label>
-                            <span class="text-xs text-slate-500">Padding & Faststart</span>
-                        </div>
-                        <div class="space-y-2 pt-2 border-t border-slate-900">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" id="fastStart" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
-                                <span class="text-xs text-slate-300">Faststart Normalization (`moov` ფაილის დასაწყისში)</span>
-                            </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="checkbox" id="stripSei" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
-                                <span class="text-xs text-slate-300">SEI NALU-ების მოცილება</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Process Button -->
-                <button id="processBtn" disabled class="w-full bg-brand-600 hover:bg-brand-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed text-slate-950 font-bold py-3.5 px-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-moon"></i> MOON METHOD - დამუშავების დაწყება
-                </button>
-            </div>
+        <div class="dash-stat">
+          <span class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 4v16M17 4v16M3 9h4M3 15h4M17 9h4M17 15h4"/></svg></span>
+          <div class="dash-num" id="d-total">—</div>
+          <div class="dash-cap">Files optimized</div>
         </div>
-
-        <!-- Right Column: Logs & Output -->
-        <div class="lg:col-span-5 space-y-6 flex flex-col">
-            <!-- Console Box -->
-            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex-1 flex flex-col">
-                <div class="flex items-center justify-between mb-4">
-                    <h2 class="text-base font-semibold text-slate-200 flex items-center gap-2">
-                        <i class="fa-solid fa-terminal text-brand-500"></i> MOON METHOD ლოგი
-                    </h2>
-                    <button id="clearLogs" class="text-xs text-slate-500 hover:text-slate-300">გასუფთავება</button>
-                </div>
-                
-                <div id="consoleLog" class="bg-slate-950 font-mono text-xs text-emerald-400 p-4 rounded-xl border border-slate-800 flex-1 overflow-y-auto max-h-[400px] min-h-[300px] space-y-1">
-                    <p class="text-slate-600">> MOON METHOD მზადაა. ატვირთეთ MP4 / MOV ფაილი...</p>
-                </div>
-
-                <!-- Progress Bar -->
-                <div class="mt-4 space-y-1">
-                    <div class="flex justify-between text-xs text-slate-400">
-                        <span>პროგრესი</span>
-                        <span id="progressPercent">0%</span>
-                    </div>
-                    <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
-                        <div id="progressBar" class="bg-brand-500 h-full w-0 transition-all duration-300"></div>
-                    </div>
-                </div>
-
-                <!-- Download Area -->
-                <div class="mt-6">
-                    <button id="downloadBtn" class="hidden w-full bg-slate-100 hover:bg-white text-slate-950 font-bold py-3 px-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-download text-brand-600"></i> შენახვა (MOON_METHOD_Processed.mp4)
-                    </button>
-                </div>
-            </div>
+        <div class="dash-stat">
+          <span class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg></span>
+          <div class="dash-num" id="d-today">—</div>
+          <div class="dash-cap">Today</div>
         </div>
-    </main>
+        <div class="dash-stat">
+          <span class="kpi-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4M3 15h18"/></svg></span>
+          <div class="dash-num" id="d-month">—</div>
+          <div class="dash-cap">This month</div>
+        </div>
+      </div>
+      <div class="card-head" style="margin-top:22px"><svg class="ov-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 4v4h4"/><path d="M12 8v4l3 2"/></svg>Recent uploads</div>
+      <div class="recent-list" id="recent-list"></div>
+      <div class="card-head" style="margin-top:22px"><svg class="ov-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="10" width="3.5" height="10" rx="1"/><rect x="10" y="5" width="3.5" height="15" rx="1"/><rect x="16" y="13" width="3.5" height="7" rx="1"/></svg>Last 14 days</div>
+      <div class="dash-bars" id="dash-bars"></div>
+    </div>
 
-    <!-- JS Scripts -->
-    <script src="kuronai-engine.js"></script>
-    <script src="inflate.js"></script>
-    <script src="ffmpeg.js"></script>
-    <script src="prex.js"></script>
-    <script src="features.js"></script>
-    <script src="content.js"></script>
-    <script src="app.js"></script>
+    <div class="card">
+      <div class="card-head"><svg class="ov-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Access</div>
+      <div class="hint" id="dash-session">Checking session…</div>
+      <div class="hint">Expand any tab above — the Optimizer is ready whenever you are. Uploads are counted automatically after each successful optimization.</div>
+    </div>
 
-    <!-- Application Controller Logic -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const dropZone = document.getElementById('dropZone');
-            const fileInput = document.getElementById('fileInput');
-            const fileInfo = document.getElementById('fileInfo');
-            const fileName = document.getElementById('fileName');
-            const fileSize = document.getElementById('fileSize');
-            const removeFile = document.getElementById('removeFile');
-            const processBtn = document.getElementById('processBtn');
-            const downloadBtn = document.getElementById('downloadBtn');
-            const consoleLog = document.getElementById('consoleLog');
-            const progressBar = document.getElementById('progressBar');
-            const progressPercent = document.getElementById('progressPercent');
+    <div class="card" id="history-card">
+      <div class="card-head" style="display:flex;justify-content:space-between;align-items:center">
+        <span><svg class="ov-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="14" height="16" rx="2"/><path d="M16 8l6-4v12l-6-4"/></svg>Optimization History</span>
+        <button type="button" id="history-clear" style="background:none;border:1px solid rgba(255,255,255,.15);color:#8f89b5;font-size:9px;padding:2px 8px;border-radius:6px;cursor:pointer">Clear</button>
+      </div>
+      <div class="card-body" style="padding:10px 14px">
+        <div id="history-list" style="display:flex;flex-direction:column;gap:6px;max-height:300px;overflow-y:auto">
+          <div class="ov-empty">
+            <svg class="ov-empty-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 13h5l1 3h6l1-3h5"/><path d="M5 13l-2 7h18l-2-7M3 13V5h18v8"/></svg>
+            <div class="ov-empty-title">No optimizations yet</div>
+            <button type="button" class="ov-cta-sm" onclick="document.getElementById('tab-optimize').click();return false;">Optimize your first video</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="overview-marketing"></div>
+  </div>
+  </section>
 
-            let currentFile = null;
-            let processedBuffer = null;
+  <section id="pane-optimize" class="pane">
+    <div class="card dropzone" id="dropzone" tabindex="0">
+      <input type="file" id="file-input" accept="video/mp4,video/quicktime,video/*" hidden>
+      <span class="dz-badge">IN-BROWSER</span>
+      <span class="dz-corner tl"></span><span class="dz-corner tr"></span><span class="dz-corner bl"></span><span class="dz-corner br"></span>
+      <div class="dz-icon"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15V4m0 0 5 5m-5-5-5 5"/><path d="M4 20h16"/></svg></div>
+      <div class="dz-title">Drop your video here</div>
+      <div class="dz-sub" id="dz-sub">Click or drag &middot; MP4 / MOV &middot; <b>H.264 + AAC</b> ideal &middot; processed in your browser</div>
+      <button type="button" class="choose-btn" id="choose-btn">Choose a file</button>
+      <div class="dz-release" id="dz-release"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0 4-4m-4 4-4-4"/><path d="M4 20h16"/></svg><span>Release to load</span></div>
+    </div>
 
-            function log(msg, type = 'info') {
-                const p = document.createElement('p');
-                const time = new Date().toLocaleTimeString();
-                if (type === 'error') p.className = 'text-red-400';
-                else if (type === 'success') p.className = 'text-brand-400 font-bold';
-                else if (type === 'warn') p.className = 'text-yellow-400';
-                else p.className = 'text-slate-400';
-                
-                p.textContent = `[${time}] ${msg}`;
-                consoleLog.appendChild(p);
-                consoleLog.scrollTop = consoleLog.scrollHeight;
-            }
+    <div class="card queue-card hidden" id="queue-card">
+      <div class="card-head row-head">
+        <span style="display:flex;align-items:center;gap:9px;">Batch queue <span class="q-badge" id="q-count">0/5</span></span>
+        <button class="btn ghost q-clear hidden" id="q-clear" type="button">Clear</button>
+      </div>
+      <div class="queue-list" id="queue-list"></div>
+      <div class="hint" id="q-hint">Drop up to 5 videos at once — each file uses 1 usage and is processed one by one, right in your browser.</div>
+    </div>
 
-            function updateProgress(percent) {
-                progressBar.style.width = `${percent}%`;
-                progressPercent.textContent = `${percent}%`;
-            }
+    <div class="card info-card hidden" id="info-card">
+      <div class="card-head">Source file</div>
+      <div class="info-grid" id="info-grid"></div>
+    </div>
 
-            // File selection UI
-            dropZone.addEventListener('click', () => fileInput.click());
-            
-            dropZone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                dropZone.classList.add('border-brand-500');
-            });
+    <div class="card presets-card" id="presets-card">
+      <div class="card-head">One-tap presets</div>
+      <div class="preset-chips" id="preset-chips">
+        <button class="pchip" type="button" data-preset="standard">TikTok Standard</button>
+        <button class="pchip" type="button" data-preset="normalize">Clean Normalize</button>
+        <button class="pchip" type="button" data-preset="cinematic">60fps Cinematic</button>
+        <button class="pchip" type="button" data-preset="gaming">120fps Gaming</button>
+        <button class="pchip" type="button" data-preset="custom">Custom</button>
+      </div>
+      <div class="hint">TikTok Standard = PREX Method (video stays byte-identical). Re-encode presets build a sharper master for TikTok's own encoder. Custom = your current options.</div>
+    </div>
 
-            dropZone.addEventListener('dragleave', () => {
-                dropZone.classList.remove('border-brand-500');
-            });
+    <div class="card hidden" id="batch-queue-card">
+      <div class="card-head" style="display:flex;justify-content:space-between;align-items:center">
+        <span>Batch Queue <span id="batch-count" style="color:#8b5cf6;font-size:10px"></span></span>
+        <button type="button" id="batch-clear" style="background:none;border:1px solid rgba(255,255,255,.15);color:#8f89b5;font-size:9px;padding:2px 8px;border-radius:6px;cursor:pointer">Clear</button>
+      </div>
+      <div class="card-body" style="padding:8px 12px">
+        <div id="batch-list" style="display:flex;flex-direction:column;gap:4px;max-height:250px;overflow-y:auto"></div>
+        <button type="button" id="batch-start" style="width:100%;margin-top:8px;padding:8px;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border:none;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer">Process All</button>
+      </div>
+    </div>
+    <div class="card readiness-card hidden" id="readiness-card">
+      <div class="card-head row-head">
+        <span style="display:flex;align-items:center;gap:9px;">Upload readiness</span>
+        <span class="rd-score" id="rd-score">—</span>
+      </div>
+      <div class="rd-chips" id="rd-chips"></div>
+      <div class="rd-verdict" id="rd-verdict"></div>
+    </div>
 
-            dropZone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                dropZone.classList.remove('border-brand-500');
-                if (e.dataTransfer.files.length) {
-                    handleFile(e.dataTransfer.files[0]);
-                }
-            });
-
-            fileInput.addEventListener('change', (e) => {
-                if (e.target.files.length) {
-                    handleFile(e.target.files[0]);
-                }
-            });
-
-            function handleFile(file) {
-                if (!file.name.match(/\.(mp4|mov)$/i)) {
-                    log('შეცდომა: გთხოვთ აირჩიოთ მხოლოდ MP4 ან MOV ფორმატი!', 'error');
-                    return;
-                }
-                currentFile = file;
-                fileName.textContent = file.name;
-                fileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
-                fileInfo.classList.remove('hidden');
-                processBtn.disabled = false;
-                downloadBtn.classList.add('hidden');
-                updateProgress(0);
-                log(`MOON METHOD: ფაილი ჩაიტვირთა -> ${file.name}`);
-            }
-
-            removeFile.addEventListener('click', () => {
-                currentFile = null;
-                fileInput.value = '';
-                fileInfo.classList.add('hidden');
-                processBtn.disabled = true;
-                downloadBtn.classList.add('hidden');
-                updateProgress(0);
-                log('MOON METHOD: ფაილი ამოშლილია.');
-            });
-
-            document.getElementById('clearLogs').addEventListener('click', () => {
-                consoleLog.innerHTML = '<p class="text-slate-600">> MOON METHOD ლოგები გასუფთავებულია.</p>';
-            });
-
-            // Core Execution Pipeline
-            processBtn.addEventListener('click', async () => {
-                if (!currentFile) return;
-
-                processBtn.disabled = true;
-                downloadBtn.classList.add('hidden');
-                updateProgress(10);
-                log('MOON METHOD: პროცესი დაიწყო...', 'warn');
-
-                try {
-                    const arrayBuffer = await currentFile.arrayBuffer();
-                    let uint8Data = new Uint8Array(arrayBuffer);
-                    
-                    updateProgress(25);
-
-                    // 1. MOON METHOD - Density Engine Processing
-                    if (document.getElementById('enablePrex').checked) {
-                        log('▶ MOON METHOD [Density Engine] გაშვება...');
-                        const mult = parseInt(document.getElementById('prexMultiplier').value);
-                        const ts = document.getElementById('prexTimescale').value;
-                        
-                        if (typeof window.patchPrex === 'function') {
-                            uint8Data = window.patchPrex(uint8Data, { multiplier: mult });
-                            log(`MOON METHOD: Density დაემატა (${mult}x).`, 'success');
-                        }
-                        if (ts !== 'keep' && typeof window.patchTimescale === 'function') {
-                            uint8Data = window.patchTimescale(uint8Data, parseInt(ts));
-                            log(`MOON METHOD: Timescale -> ${ts} Hz.`, 'success');
-                        }
-                    }
-                    updateProgress(50);
-
-                    // 2. MOON METHOD - Sanitizer Processing
-                    if (document.getElementById('enableKrypton').checked) {
-                        log('▶ MOON METHOD [Sanitizer Engine] გაშვება...');
-                        if (typeof window.KryptonaepMP4 === 'function') {
-                            const engine = new window.KryptonaepMP4(uint8Data);
-                            if (document.getElementById('sanitizeSignatures').checked && engine.sanitizeSignatures) {
-                                engine.sanitizeSignatures();
-                                log('MOON METHOD: მეტამონაცემები გასუფთავდა.', 'success');
-                            }
-                            if (document.getElementById('injectAacClone').checked && engine.injectAacClone) {
-                                engine.injectAacClone();
-                                log('MOON METHOD: AAC Clone ტრეკი დაემატა.', 'success');
-                            }
-                            uint8Data = engine.getResult();
-                        }
-                    }
-                    updateProgress(75);
-
-                    // 3. MOON METHOD - Optimizer Processing
-                    if (document.getElementById('enableInflate').checked) {
-                        log('▶ MOON METHOD [Optimizer Engine] გაშვება...');
-                        if (document.getElementById('stripSei').checked && typeof window.stripSei === 'function') {
-                            uint8Data = window.stripSei(uint8Data);
-                            log('MOON METHOD: SEI ბლოკები ამოღებულია.', 'success');
-                        }
-                        if (document.getElementById('fastStart').checked && typeof window.fastStartNormalize === 'function') {
-                            uint8Data = window.fastStartNormalize(uint8Data);
-                            log('MOON METHOD: Faststart ოპტიმიზაცია დასრულდა.', 'success');
-                        }
-                    }
-
-                    processedBuffer = uint8Data;
-                    updateProgress(100);
-                    log('✔ MOON METHOD: ყველა ოპერაცია წარმატებით დასრულდა!', 'success');
-                    
-                    downloadBtn.classList.remove('hidden');
-                } catch (err) {
-                    log(`MOON METHOD შეცდომა: ${err.message}`, 'error');
-                    console.error(err);
-                } finally {
-                    processBtn.disabled = false;
-                }
-            });
-
-            // Download Trigger
-            downloadBtn.addEventListener('click', () => {
-                if (!processedBuffer) return;
-                const blob = new Blob([processedBuffer], { type: 'video/mp4' });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `MOON_METHOD_${currentFile.name}`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                log('MOON METHOD: ფაილი ჩამოიტვირთა.');
-            });
-        });
-    </script>
-</body>
-</html>
+    <div class="card options-card">
+      <div class="card-head row-head" id="options-head">
+        <span style="display:flex;align-items:center;gap:9px;">Options</span>
+        <button class="collapse-btn collapsed" id="options-toggle" title="Minimize / maximize options" aria-label="Toggle options"><span class="chev">&#9662;</span></button>
+      </div>
+      <div class="card-body closed" id="options-body">
+        <div class="opt-row">
+          <label class="opt-label" for="mode">Mode</label>
+          <select id="mode">
+            <option value="method" selected>PREX Method (recommended)</option>
+            <option value="normalize">Clean remux (safe, no tricks)</option>
+            <option value="reencode">High-quality re-encode (ffmpeg, slower but sharper)</option>
+            <option value="patch">Inflate frames (legacy dup-frame, higher flag risk)</option>
+          </select>
+        </div>
+        <div class="opt-row" id="mult-row">
+          <label class="opt-label" for="multiplier">Frame density</label>
+          <select id="multiplier">
+            <option value="auto" selected>Auto (legacy)</option>
+            <option value="2">2x</option>
+            <option value="5">5x</option>
+            <option value="10">10x</option>
+          </select>
+        </div>
+        <div class="opt-row">
+          <label class="opt-label" for="remux">Clean remux</label>
+          <label class="opt-check"><input type="checkbox" id="remux" checked> FFmpeg faststart + metadata scrub</label>
+        </div>
+        <div class="opt-row">
+          <label class="opt-label" for="autoopt">Auto-start</label>
+          <label class="opt-check"><input type="checkbox" id="autoopt"> Auto-optimize right after load</label>
+        </div>
+        <div class="opt-row" id="upscale-row">
+          <label class="opt-label" for="upscale2k">Upscale</label>
+          <label class="opt-check"><input type="checkbox" id="upscale2k"> Upscale to 2K (max sharpness, much slower)</label>
+        </div>
+        <div class="opt-row" id="codec-row" style="display:none">
+              <label class="opt-label" for="forge-codec">Codec</label>
+              <select id="forge-codec">
+                <option value="libx265" selected>HEVC hvc1</option>
+                <option value="libx264">H.264 High@4.2</option>
+              </select>
+            </div>
+            <div class="opt-row" id="quality-row">
+          <label class="opt-label" for="encode-quality">Quality</label>
+          <select id="encode-quality">
+            <option value="sharper" selected>Sharper (best quality - slower)</option>
+            <option value="faster">Faster (CRF 18, quick - still sharp)</option>
+          </select>
+        </div>
+        <div class="hint" id="normalize-hint"><b>Clean remux (safest, zero tricks):</b> remuxes the file with FFmpeg (moov first, faststart, all CapCut/editor metadata stripped) WITHOUT touching the video, its timing or its audio. The upload keeps its real 60fps and normal playback speed - it is just a clean, canonical container. Best choice when you only want to avoid "Only me" and don't need extra sharpness. Note: the audio stays bit-identical to your CapCut export, so do not re-upload the same export to several accounts.</div>
+        <div class="hint" id="reencode-hint"><b>High-quality re-encode:</b> decodes the video and re-encodes it with libx264 plus a sharpening pass - a much better "master" for TikTok's own re-encode, so the served result is noticeably sharper. <b>Sharper</b> = CRF 14, medium preset (best quality, now faster). <b>Faster</b> = CRF 18, veryfast preset (several times quicker, still sharp). The upload keeps exactly <b>60fps</b> (constant frame rate) and the resolution of your CapCut export. 4K sources are auto-downscaled to 2K - TikTok serves max 1080p anyway, so you</div>
