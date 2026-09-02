@@ -144,7 +144,7 @@
     --lp-dim: #a9a1d4;
     --lp-v2: #c4b5fd;
     --lp-pink: #e9d5ff;
-    --lp-login: #7c3aed;
+    --lp-discord: #5865F2;
     --sans: "Sora","Inter","Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
     --body: "Inter","Segoe UI",-apple-system,"Helvetica Neue",Arial,sans-serif;
   }
@@ -191,7 +191,7 @@
   }
   .lp-btn:hover { transform: translateY(-1px); box-shadow: 0 16px 38px rgba(139,92,246,.5); }
   .lp-btn.ghost { background: rgba(139,92,246,.12); border: 1px solid rgba(168,85,247,.5); color: var(--lp-pink); box-shadow: 0 8px 26px rgba(139,92,246,.18); }
-  .lp-btn.login { background: linear-gradient(135deg,#7c3aed,#a855f7); box-shadow: 0 12px 32px rgba(139,92,246,.45); }
+  .lp-btn.discord { background: linear-gradient(135deg,#4752C4,#5865F2); box-shadow: 0 12px 32px rgba(88,101,242,.45); }
   .lp-btn.sm { padding: 9px 16px; font-size: 12px; }
   .lp-hero { text-align: center; padding: 56px 0 26px; }
   .lp-eyebrow {
@@ -921,7 +921,7 @@
     <p class="hero-sub">Free to start, boost to grow, VIP for unlimited everything — 4K, 120fps and full support. Promoters get the VIP pass for free.</p>
     <div class="hero-pills">
       <span class="hpill">Free tier</span>
-      <span class="hpill">Pro perk</span>
+      <span class="hpill">Server boost perk</span>
       <span class="hpill">VIP unlimited</span>
     </div>
   </div>
@@ -944,8 +944,8 @@
     <div class="card">
       <div class="card-head" id="dash-profile-head">
         <span style="display:flex;align-items:center;gap:10px;justify-content:center;">
-          <span class="dash-avatar" id="dash-avatar">U</span>
-          <div id="dash-name" style="font-weight:700;font-size:15px">User Name</div>
+          <span class="dash-avatar" id="dash-avatar">P</span>
+          <div id="dash-name" style="font-weight:700;font-size:15px">Loading…</div>
         </span>
         <div id="dash-role" style="font-size:11px;color:var(--dim)">—</div>
         <span id="dash-tier" class="tier-chip">—</span>
@@ -1057,7 +1057,7 @@
 
     <div class="card hidden" id="batch-queue-card">
       <div class="card-head" style="display:flex;justify-content:space-between;align-items:center">
-        <span>Batch Queue <span id="batch-count" style="color:#8b5cf6;font-size:10px"></span></span>
+        <span>?? Batch Queue <span id="batch-count" style="color:#8b5cf6;font-size:10px"></span></span>
         <button type="button" id="batch-clear" style="background:none;border:1px solid rgba(255,255,255,.15);color:#8f89b5;font-size:9px;padding:2px 8px;border-radius:6px;cursor:pointer">Clear</button>
       </div>
       <div class="card-body" style="padding:8px 12px">
@@ -1125,4 +1125,1178 @@
           </select>
         </div>
         <div class="hint" id="normalize-hint"><b>Clean remux (safest, zero tricks):</b> remuxes the file with FFmpeg (moov first, faststart, all CapCut/editor metadata stripped) WITHOUT touching the video, its timing or its audio. The upload keeps its real 60fps and normal playback speed - it is just a clean, canonical container. Best choice when you only want to avoid "Only me" and don't need extra sharpness. Note: the audio stays bit-identical to your CapCut export, so do not re-upload the same export to several accounts.</div>
-        <div class="hint" id="reencode-hint"><b>High-quality re-encode:</b> decodes the video and re-encodes it with libx264 plus a sharpening pass - a much better "master" for TikTok's own re-encode, so the served result is noticeably sharper. <b>Sharper</b> = CRF 14, medium preset (best quality, now faster). <b>Faster</b> = CRF 18, veryfast preset (several times quicker, still sharp). The upload keeps exactly <b>60fps</b> (constant frame rate) and the resolution of your CapCut export. 4K sources are auto-downscaled to 2K - TikTok serves max 1080p anyway, so you</div>
+        <div class="hint" id="reencode-hint"><b>High-quality re-encode:</b> decodes the video and re-encodes it with libx264 plus a sharpening pass - a much better "master" for TikTok's own re-encode, so the served result is noticeably sharper. <b>Sharper</b> = CRF 14, medium preset (best quality, now faster). <b>Faster</b> = CRF 18, veryfast preset (several times quicker, still sharp). The upload keeps exactly <b>60fps</b> (constant frame rate) and the resolution of your CapCut export. 4K sources are auto-downscaled to 2K - TikTok serves max 1080p anyway, so you lose nothing and the encode is ~2x faster. Tick "Upscale to 2K" only for 1080p sources that want extra headroom (1440x2560) - very slow but the sharpest option. After posting, check the TikTok player tag: it should read <b>1080P/60</b> or higher.</div>
+        <div class="hint" id="method-hint">Recommended for best quality. Drop your video, optimize, and upload.</div>
+        <div class="hint" id="patch-hint"><b></b> replaced most frames with duplicate NAL blocks. Easily caught by TikTok's per-frame content analysis - this is the variant that kept landing on "Only me". Kept for backward compatibility, not recommended.</div>
+        <div class="hint">The studio is hosted 24/7 — everything runs right here in your browser, no install, no local setup needed.</div>
+        <div class="card upload-card" style="margin-bottom:0">
+          <div class="card-head row-head" id="checklist-head">
+            <span style="display:flex;align-items:center;gap:9px;">TikTok upload checklist</span>
+            <button class="collapse-btn" id="checklist-toggle" aria-label="Toggle checklist"><span class="chev">&#9662;</span></button>
+          </div>
+          <div class="card-body" id="checklist-body">
+            <ul class="checklist">
+              <li>Upload in <b>PREX Method</b> mode (recommended) - it keeps the video 100% byte-identical (zero loss) so TikTok serves full resolution. Re-encode is the fallback only when PREX can't process the file.</li>
+              <li>Upload from <b>PC</b> (tiktok.com/upload or TikTok Studio web) - never from the phone app, it re-encodes and undoes the optimization.</li>
+              <li>Set post privacy to <b>Everyone</b> on the upload screen, then <b>re-select "Everyone" one more time right before clicking Post</b> - TikTok Studio web has a known bug (since 2026) that silently switches posts to "Only me" even when "Everyone" was chosen.</li>
+              <li>After posting, open the <b>Check video</b> tab and confirm the result shows <b>Public</b> (not an error) before moving on.</li>
+              <li>Do <b>not</b> edit / crop / add music inside TikTok after uploading - any in-app edit re-encodes the file.</li>
+              <li>Toggle <b>"Allow high-quality uploads"</b> ON in TikTok Settings → Content preferences.</li>
+              <li>Do <b>not</b> re-upload the same optimized file to multiple accounts - TikTok's dedup system links identical uploads across accounts.</li>
+              <li>If a post still lands on "Only me": <b>flip the privacy back to Everyone</b> on the post itself (app or web) - this works on TikTok's side; also clear tiktok.com cookies, re-login, and retry with a fresh session if it keeps happening.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card log-card hidden" id="log-card">
+      <div class="card-head">Processing log</div>
+      <div class="log" id="log"></div>
+    </div>
+
+    <div class="card engine-card hidden" id="engine-card">
+      <div class="engine-head">
+        <span class="engine-logo">PREX ENGINE</span>
+        <span class="engine-dot" id="engine-dot"></span>
+      </div>
+      <div class="engine-rows" id="engine-rows">
+        <div class="eg-row"><span class="eg-icon"></span><span class="eg-label">Analyzing video</span><span class="eg-detail"></span><span class="eg-pct"></span></div>
+        <div class="eg-row"><span class="eg-icon"></span><span class="eg-label">Optimizing encode</span><span class="eg-detail"></span><span class="eg-pct"></span></div>
+        <div class="eg-row"><span class="eg-icon"></span><span class="eg-label">Preserving frame rate</span><span class="eg-detail"></span><span class="eg-pct"></span></div>
+        <div class="eg-row"><span class="eg-icon"></span><span class="eg-label">Finalizing output</span><span class="eg-detail"></span><span class="eg-pct"></span></div>
+      </div>
+    </div>
+
+    <div class="card result-card hidden" id="result-card">
+      <div class="card-head">Result &middot; optimized preview</div>
+      <video class="result-video" id="result-video" controls muted preload="none" playsinline></video>
+      <div class="result-grid" id="result-grid"></div>
+    </div>
+    <div class="card hidden" id="report-card">
+      <div class="card-head">After you post &middot; 10-second Only me check</div>
+      <div class="card-body" style="padding:12px 16px">
+        <div class="hint" style="margin-top:0">Posted the video yet? TikTok Studio web has a known bug that silently switches posts to "Only me". One tap tells us how it went (data goes to the admin only).</div>
+        <div class="report-actions" id="report-actions" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px">
+          <button class="btn" id="report-no">It&rsquo;s public &mdash; all good</button>
+          <button class="btn primary" id="report-yes">It went &ldquo;Only me&rdquo;</button>
+        </div>
+        <div class="hint hidden" id="report-fix" style="margin-top:10px"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pane-check" class="pane">
+    <div class="card">
+      <div class="card-head">TikTok video check</div>
+      <div class="hint">Paste a TikTok video link to see what resolution / bitrate TikTok is actually serving for that post - and whether the post is <b>Public</b> or locked to <b>"Only me"</b>. Confirms whether your upload survived compression.</div>
+      <div class="hint warn" id="check-server-hint" style="margin-top:10px">Works right here on the live studio — paste the link and TikTok's served quality is fetched server-side, so your browser is never blocked.</div>
+      <div class="check-row">
+        <input type="url" id="check-url" placeholder="https://www.tiktok.com/@user/video/1234567890..." spellcheck="false">
+        <button class="btn" id="check-btn">Check</button>
+      </div>
+      <div class="check-note" id="check-note"></div>
+      <div class="check-result hidden" id="check-result"></div>
+    </div>
+
+    <div class="card hidden" id="recent-checks-card">
+      <div class="card-head row-head">
+        <span style="display:flex;align-items:center;gap:9px;">Recent checks <span style="font-size:11px;color:var(--muted)">(this browser)</span></span>
+        <button class="btn ghost" style="margin:0;padding:8px 14px;font-size:12px;width:auto" id="rc-clear" type="button">Clear</button>
+      </div>
+      <div class="recent-checks" id="recent-checks"></div>
+    </div>
+  </section>
+
+  <section id="pane-guide" class="pane">
+    <div class="card guide-embed-card guide-premium">
+      <div class="guide-premium-bg"></div>
+      <div class="guide-premium-head">
+        <span class="guide-badge"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L15 8l6 1-4 4 1 6-7-4-7 4 1-6-4-4 6-1z"/></svg> FEATURED TUTORIAL</span>
+        <span class="guide-live"><span class="guide-dot"></span> PREX METHOD</span>
+      </div>
+      <div class="guide-premium-grid">
+        <div class="guide-premium-left" style="text-align:center; display:flex; flex-direction:column; align-items:center;">
+          <h3 class="guide-premium-title">How to use <span>PREX Method</span></h3>
+          <p class="guide-premium-desc" style="text-align:center;">Watch this quick guide to optimize your video before uploading to TikTok — keep the quality and always get <b>1080P/60</b>.</p>
+          <ul class="guide-premium-points" style="align-items:center;">
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Export H.264 + AAC (CapCut/Premiere)</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Drop sa Optimizer → PREX Method</li>
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg> Upload sa tiktok.com (PC) — re-select Everyone</li>
+          </ul>
+          <div class="guide-premium-actions" style="justify-content:center;">
+            <a href="https://www.tiktok.com/@asianboy_prex/video/7679030317163859207" target="_blank" rel="noopener" class="guide-btn-primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V8.94A6.27 6.27 0 0 0 6.4 9.75a6.27 6.27 0 0 0-6.27 6.27 6.27 6.27 0 0 0 6.27 6.27 6.27 6.27 0 0 0 6.27-6.27V8.75a8.2 8.2 0 0 0 4.77 1.52V6.69z"/></svg> Watch on TikTok</a>
+            <a href="javascript:void(0)" onclick="document.getElementById('tab-optimize').click();return false;" class="guide-btn-ghost">Open Optimizer &rarr;</a>
+          </div>
+          <div class="guide-premium-meta" style="text-align:center;">PREX Method • TikTok Tutorial</div>
+        </div>
+        <div class="guide-premium-right">
+          <div class="guide-embed-frame">
+            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@asianboy_prex/video/7679030317163859207" data-video-id="7679030317163859207" style="max-width: 340px;min-width: 280px;"></blockquote>
+          </div>
+          <script async src="https://www.tiktok.com/embed.js"></script>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-head">1 &middot; Export settings assistant</div>
+      <div class="hint" style="margin-top:0">Your editor must export a clean <b>H.264 + AAC MP4 at your target FPS</b> — TikTok re-encodes everything anyway, so codec, bitrate and clean metadata matter more than quality presets. Pick your editor and target to get the exact settings.</div>
+      <div class="guide-pick">
+        <div class="g-field">
+          <label class="opt-label" for="g-editor">Editor</label>
+          <select id="g-editor">
+            <option value="capcut" selected>CapCut (PC / mobile)</option>
+            <option value="davinci">DaVinci Resolve</option>
+            <option value="premiere">Adobe Premiere Pro</option>
+            <option value="filmora">Wondershare Filmora</option>
+            <option value="phone">Phone (iPhone / Android)</option>
+          </select>
+        </div>
+        <div class="g-field">
+          <label class="opt-label" for="g-target">Delivery target</label>
+          <select id="g-target">
+            <option value="1080p60" selected>1080p &middot; 60 fps</option>
+            <option value="1080p120">1080p &middot; 120 fps</option>
+            <option value="4k60">4K &middot; 60 fps</option>
+          </select>
+        </div>
+      </div>
+      <div class="g-panel hidden" id="g-panel">
+        <div class="g-step-head" style="cursor:default">
+          <span class="gstep-title">Exact settings for this editor</span>
+        </div>
+        <div class="g-lines" id="g-lines"></div>
+        <div class="g-actions">
+          <button class="btn" type="button" id="g-copy">Copy settings</button>
+          <span class="g-copied hidden" id="g-copied">Copied to clipboard</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head">2 &middot; How to upload (step by step)</div>
+      <div class="gsteps" id="gsteps">
+        <div class="gstep" data-step="0">
+          <div class="gstep-head">
+            <span class="gstep-num">1</span>
+            <span class="gstep-title">Export clean from your editor</span>
+            <button class="gstep-toggle" type="button" aria-label="Toggle step"><span class="chev">&#9662;</span></button>
+          </div>
+          <div class="gstep-body closed">Use the Export Settings assistant above (card 1). Always export <b>H.264/AVC + AAC</b> in an MP4 container at a <b>constant frame rate</b> (60 or 120) — variable frame rate makes TikTok's player tag drop below 1080P/60.</div>
+          <label class="gstep-done"><input type="checkbox" data-done="0"><span>Done</span></label>
+        </div>
+        <div class="gstep" data-step="1">
+          <div class="gstep-head">
+            <span class="gstep-num">2</span>
+            <span class="gstep-title">Run the Optimizer</span>
+            <button class="gstep-toggle" type="button" aria-label="Toggle step"><span class="chev">&#9662;</span></button>
+          </div>
+          <div class="gstep-body closed">Open the <b>Optimizer</b> tab, drop your export and choose <b>PREX Method (recommended)</b> — the video track stays 100% byte-identical while the audio sample table is exposed for full-resolution serving. Watch the <b>Upload readiness</b> card after it analyzes your file.</div>
+          <label class="gstep-done"><input type="checkbox" data-done="1"><span>Done</span></label>
+        </div>
+        <div class="gstep" data-step="2">
+          <div class="gstep-head">
+            <span class="gstep-num">3</span>
+            <span class="gstep-title">Upload from a PC browser</span>
+            <button class="gstep-toggle" type="button" aria-label="Toggle step"><span class="chev">&#9662;</span></button>
+          </div>
+          <div class="gstep-body closed">Go to <b>tiktok.com/upload</b> or TikTok Studio web — never the phone app, it re-encodes and undoes the optimization. Set privacy to <b>Everyone</b>, then <b>re-select "Everyone" one more time right before clicking Post</b> (TikTok Studio web has a known bug since 2026 that silently switches posts to "Only me").</div>
+          <label class="gstep-done"><input type="checkbox" data-done="2"><span>Done</span></label>
+        </div>
+        <div class="gstep" data-step="3">
+          <div class="gstep-head">
+            <span class="gstep-num">4</span>
+            <span class="gstep-title">Turn on "Allow high-quality uploads"</span>
+            <button class="gstep-toggle" type="button" aria-label="Toggle step"><span class="chev">&#9662;</span></button>
+          </div>
+          <div class="gstep-body closed">TikTok Settings &rarr; Content preferences &rarr; toggle <b>"Allow high-quality uploads"</b> ON. Without it, TikTok is far more likely to serve a lower-bitrate version of your video.</div>
+          <label class="gstep-done"><input type="checkbox" data-done="3"><span>Done</span></label>
+        </div>
+        <div class="gstep" data-step="4">
+          <div class="gstep-head">
+            <span class="gstep-num">5</span>
+            <span class="gstep-title">Verify with the Check tab</span>
+            <button class="gstep-toggle" type="button" aria-label="Toggle step"><span class="chev">&#9662;</span></button>
+          </div>
+          <div class="gstep-body closed">Open the <b>Check video</b> tab, paste the post URL and confirm it shows <b>Public</b> with <b>1080p</b> (or your target) served — the check is now saved in Recent checks below. If it shows SD or "Only me", use the post-privacy flip + re-login fix.</div>
+          <label class="gstep-done"><input type="checkbox" data-done="4"><span>Done</span></label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section id="pane-extension" class="pane">
+    <div class="card ext-hero">
+      <div class="ext-hero-main">
+        <div class="ext-brand"><img src="logo.png" alt="PREX logo"></div>
+        <div class="ext-hero-copy">
+          <div class="ext-kicker">PREX ANALYZER <span class="ext-version">v1.6.0</span></div>
+          <div class="ext-title">Playback telemetry, read like an engineer.</div>
+          <p class="ext-sub">PREX Analyzer pins a live telemetry HUD to every TikTok player — resolution, FPS, bitrate, CDN latency and buffering, read directly from the page. No accounts. No analytics. Nothing leaves your browser.</p>
+          <div class="ext-pills">
+            <span class="ext-pill">Free forever</span>
+            <span class="ext-pill">Chrome &amp; Edge</span>
+            <span class="ext-pill">~30 KB</span>
+            <span class="ext-pill">No analytics</span>
+          </div>
+        </div>
+      </div>
+      <div class="ext-hero-side">
+        <a class="btn download ext-btn" href="prex-analyzer-v1.6.0.zip" download><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12m0 0 5-5m-5 5-5-5"/><path d="M4 20h16"/></svg> Download extension</a>
+        <div class="ext-meta">ZIP &middot; <b>~30 KB</b><br>Extract it before installing.</div>
+        <div class="ext-hud" aria-hidden="true">
+          <div class="ext-hud-h"><span class="ext-hud-live"></span> PREX ANALYZER</div>
+          <div class="ext-hud-row"><span>Resolution</span><b>1080 &times; 1920</b></div>
+          <div class="ext-hud-row"><span>Frame rate</span><b class="ok">60 fps</b></div>
+          <div class="ext-hud-row"><span>Bitrate</span><b>5.2 Mbps</b></div>
+          <div class="ext-hud-row"><span>CDN latency</span><b>41 ms</b></div>
+          <div class="ext-hud-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card ext-cell">
+      <div class="ext-cell-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg></div>
+      <div class="ext-cell-t">Live telemetry</div>
+      <div class="ext-cell-d">Resolution, on-screen size, quality class, FPS, bitrate, CDN latency, buffer and state — updated in real time from the player's own data.</div>
+    </div>
+    <div class="card ext-cell">
+      <div class="ext-cell-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4"/><circle cx="12" cy="12" r="2.5"/></svg></div>
+      <div class="ext-cell-t">Pin &amp; drag anywhere</div>
+      <div class="ext-cell-d">Grab the header and float the panel across the window. It collapses into a live FPS strip — and remembers its spot.</div>
+    </div>
+    <div class="card ext-cell">
+      <div class="ext-cell-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 12h8M19 8l4 4-4 4"/><path d="M14 4H5a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h9"/></svg></div>
+      <div class="ext-cell-t">Bridge to the studio</div>
+      <div class="ext-cell-d">A one-click link back to the hosted PREX Optimizer — assess what TikTok serves, then fix it at the source.</div>
+    </div>
+
+    <div class="card ext-install">
+      <div class="card-head">Install in 4 steps</div>
+      <ol class="ext-steps">
+        <li><b>Download the ZIP</b><span>Save it somewhere easy to find, then extract it into its own folder.</span></li>
+        <li><b>Open the extension manager</b><span>Visit <code>chrome://extensions</code> (or <code>edge://extensions</code>) and flick <b>Developer mode</b> on.</span></li>
+        <li><b>Load unpacked</b><span>Remove any older Analyzer build, then pick the extracted folder. The PREX icon lands in your toolbar.</span></li>
+        <li><b>Open any TikTok video</b><span>The panel appears beside the player. Tweak it, drag it, and keep working.</span></li>
+      </ol>
+    </div>
+
+    <div class="card ext-tips">
+      <div class="card-head">Shortcuts &amp; moves</div>
+      <div class="ext-qs">
+        <div class="ext-q"><span class="ext-qk">Ctrl + Shift + P</span><span>Show or hide the panel from anywhere</span></div>
+        <div class="ext-q"><span class="ext-qk">− button</span><span>Collapse into a slim live strip</span></div>
+        <div class="ext-q"><span class="ext-qk">Header drag</span><span>Reposition freely — it remembers the spot</span></div>
+        <div class="ext-q"><span class="ext-qk">Pause</span><span>The last telemetry readout stays frozen</span></div>
+      </div>
+    </div>
+
+    <div class="card ext-qa">
+      <div class="card-head">Troubleshooting</div>
+      <div class="qa">
+        <div class="qa-row"><b>No window appears</b><span>Reload the extension (<code>chrome://extensions</code> &rarr; <b>Reload</b>) then refresh the TikTok tab.</span></div>
+        <div class="qa-row"><b>FPS shows "—"</b><span>Normal while no frames render; pause the video and the last value stays.</span></div>
+        <div class="qa-row"><b>Latency shows "—"</b><span>TikTok served segments from cache; keep watching and it appears within seconds.</span></div>
+        <div class="qa-row"><b>Panel looks old</b><span>You're on an older build &mdash; download v1.6.0 above and reinstall.</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="pane-pricing" class="pane">
+    <div class="lp-sec">
+      <div class="lp-sec-head">
+        <div class="lp-k">PLANS</div>
+        <div class="lp-h2">Pick your tier.</div>
+        <div class="lp-p">Free to start, boost to grow, VIP for unlimited everything — 4K, 120fps and full support. Promoters get the VIP pass for free.</div>
+      </div>
+
+      <div class="tier-grid">
+        <div class="tier-card tier-member">
+          <div class="tier-head">
+            <span class="tier-ic tier-ic-member"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.5 2.5 4 4 4 4H8s2.5-1.5 4-4Z"/><path d="M5 10c0 4 2.5 7 7 7s7-3 7-7H5Z"/><path d="M12 17v4"/></svg></span>
+            <div class="tier-name">MEMBER</div>
+            <div class="tier-tag">Start free. Upgrade when you grow.</div>
+          </div>
+          <div class="tier-price">$0<span>free forever</span></div>
+          <ul class="tier-list">
+            <li class="ok">7× usage per week</li>
+            <li class="ok">Up to 1080p • 60fps</li>
+            <li class="ok">PREX Method optimizer</li>
+            <li class="ok">Check video tool</li>
+            <li class="no">4K / 120fps output</li>
+          </ul>
+          <a class="tier-cta tier-member" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener">Join the community free</a>
+        </div>
+
+        <div class="tier-card tier-booster">
+          <div class="tier-head">
+            <span class="tier-ic tier-ic-booster"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8-.8-.7-2.2-.7-3 .8Z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.9 12.9 0 0 1 22 2c0 2.72-.78 7.5-6 11a22 22 0 0 1-4 2Z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span>
+            <div class="tier-name">BOOSTER</div>
+            <div class="tier-tag">Drop a server boost — double your weekly usage.</div>
+          </div>
+          <div class="tier-price">BOOST<span>the server</span></div>
+          <ul class="tier-list">
+            <li class="ok">15× usage per week</li>
+            <li class="ok">Up to 1080p • 60fps</li>
+            <li class="ok">All Member perks</li>
+            <li class="ok">Booster role in Discord</li>
+            <li class="no">4K / 120fps output</li>
+          </ul>
+          <a class="tier-cta tier-booster" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener">Boost the PREX server</a>
+          <div class="tier-note">Requires an active server boost (Discord Nitro).</div>
+        </div>
+
+        <div class="tier-card tier-vip">
+          <div class="tier-badge">BEST SELLER</div>
+          <span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span>
+          <div class="tier-head">
+            <span class="tier-ic tier-ic-vip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.56 2.5 8.6 8.06l-6.1.53 4.6 4.04-1.36 6L12 15.5l6.26 3.13-1.36-6 4.6-4.04-6.1-.53L11.56 2.5Z"/></svg></span>
+            <div class="tier-name">VIP</div>
+            <div class="tier-tag">Unlimited. The full engine. Zero compromises.</div>
+          </div>
+          <div class="tier-price">Contributor</div>
+          <ul class="tier-list">
+            <li class="ok">Unlimited usage</li>
+            <li class="ok">Up to 4K • 120fps</li>
+            <li class="ok">Full support</li>
+            <li class="ok">Real-time studio stats</li>
+            <li class="ok">Priority feature updates</li>
+          </ul>
+          <a class="tier-cta tier-vip" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.735H5.81a1 1 0 0 1-.957-.735L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M20 21H4"/></svg>Join Contributor</a>
+        </div>
+      </div>
+
+      <div class="promo-box">
+        <div class="promo-grid">
+          <div class="promo-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
+          <div>
+            <div class="promo-title">PROMOTER <span class="promo-tag">FREE</span></div>
+            <div class="promo-tagline">Promote the method per our <b>desired requirements</b> — and you <b>instantly receive the full VIP pass</b>. No payment, no waiting.</div>
+          </div>
+<a class="promo-cta" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>Become a Promoter</a>
+        </div>
+        <div class="promo-chips">
+          <span class="promo-chip">∞ UNLIMITED</span>
+          <span class="promo-chip">4K • 120FPS</span>
+          <span class="promo-chip">GOLD BADGE</span>
+        </div>
+        <div class="promo-steps">
+          <div class="promo-step"><span class="ps-num">1</span>Get the <b>Promoter role</b> in Discord</div>
+          <span class="promo-arrow">→</span>
+          <div class="promo-step"><span class="ps-num">2</span>Promote the method per the <b>requirements</b></div>
+          <span class="promo-arrow">→</span>
+          <div class="promo-step"><span class="ps-num">3</span>Receive <b>VIP instantly</b> — 4K • 120fps • ∞</div>
+        </div>
+      </div>
+
+      <div class="tier-cmp-wrap">
+        <div class="lp-k cmp-label">COMPARE TIERS</div>
+        <div class="tier-cmp-box">
+          <table class="tier-cmp">
+            <thead>
+              <tr><th></th><th class="c-member">Member</th><th class="c-booster">Booster</th><th class="c-vip">VIP</th><th class="c-promoter">Promoter</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Usage / week</td><td class="c-d1">7×</td><td class="c-d2">15×</td><td class="c-d3">Unlimited</td><td class="c-d4">Unlimited</td></tr>
+              <tr><td>Max resolution</td><td class="c-d1">1080p</td><td class="c-d2">1080p</td><td class="c-d3">4K</td><td class="c-d4">4K</td></tr>
+              <tr><td>Frame rate</td><td class="c-d1">60fps</td><td class="c-d2">60fps</td><td class="c-d3">120fps</td><td class="c-d4">120fps</td></tr>
+              <tr><td>Support</td><td class="c-d1">Community</td><td class="c-d2">Community</td><td class="c-d3">Full support + instant</td><td class="c-d4">Full support</td></tr>
+              <tr><td>Price</td><td class="c-d1">$0</td><td class="c-d2">Server boost</td><td class="c-d3"><span class="c-pill">Contributor</span></td><td class="c-d4"><span class="c-pill gold">FREE</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="lp-p" style="text-align:center;margin-top:16px">Every tier includes the PREX Method optimizer and Check video. VIP unlocks everything — the way the engine was meant to be used. Promoter = the free VIP pass: promote the method per requirements and the tier unlocks instantly.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="page-content-container">
+  <div class="foot-brand-block">
+    <img class="foot-logo" src="logo.png" alt="PREX logo">
+    <div class="foot-note">The studio is <span class="foot-brand">hosted 24/7</span> — open it anytime, on any device with a modern browser.</div>
+  </div>
+  <div class="foot-version">
+    <button class="v-toggle" id="ver-toggle" aria-expanded="false" aria-controls="ver-body"><span class="v-chev"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span> PREX v5.0 &middot; What's new</button>
+    <div class="v-body closed" id="ver-body">
+      <ul>
+        <li><b>v5.0</b> &mdash; Aurora refinement: brand logo upgrade (the PREX mark now sits in the header, hero, extension panel and footer), tokenized design system, fluid typography, normalized lines, borders, radius and spacing, plus mobile polish &mdash; swipable tabs, bigger touch targets, action bar that never covers content.</li>
+        <li><b>v4.2</b> &mdash; Removed the live comparison demo (video slider) from the Optimizer tab.</li>
+        <li><b>v4.0</b> &mdash; Massive upgrade: <b>Login with Discord</b> (members-only, 14-day session), public landing page with live studio stats (Discord members + files optimized), new <b>Dashboard</b> tab with activity chart and session info, access pass moved to /accesspass, upload counter tracking every optimization.</li>
+        <li><b>v3.6</b> &mdash; Short-duration access windows: issue passes for as little as <b>10 minutes</b> (10m/20m/30m/40m/50m presets) or set any custom time down to 10 minutes, with a live-updating admin status every 2 seconds.</li>
+        <li><b>v3.5</b> &mdash; X100 header upgrade: brand band with a flowing aurora gradient border (violet &rarr; fuchsia &rarr; electric cyan), floating glass tab bar detached below the header with a sliding gradient pill behind the active tab, new tagline "Uploads engineered to survive TikTok".</li>
+        <li><b>v3.4</b> &mdash; Two-tier centered header: brand block (logo, title, tagline) centered on its own row with the live status cluster anchored on the right, and the tab navigation moved to a glass segmented bar underneath &mdash; room for more feature tools ahead.</li>
+        <li><b>v3.3</b> &mdash; Premium redesign pass: warm dark palette, fluid Sora/Inter type scale, tinted violet shadows, bento layout on the Extension tab, brand logo in the hero and download card, true-centered tabs and tightened spacing throughout.</li>
+        <li><b>v3.2</b> &mdash; New <b>Extension</b> tab: PREX Analyzer v1.6.0 download (ZIP), install tutorial, usage guide and troubleshooting. The analyzer's studio link now points to this hosted 24/7 site.</li>
+        <li><b>v3.1</b> &mdash; Hosted 24/7 studio: sign in with the access pass, no local server needed. Premium x10 redesign, editable access window managed by the owner, live session timer.</li>
+        <li><b>v3.0</b> &mdash; Premium UI: Sora typeface, SVG icon set, live toast notifications, result preview player with before &rarr; after stats, keyboard shortcuts (1 / 2 / O / D), stage-labelled progress bar, collapsible options.</li>
+        <li><b>v3.0</b> &mdash; Micro-interactions: checkmark draw, count-up stats, hero gradient flow, card lift, parallax ambient glow, film grain overlay.</li>
+        <li><b>v2.x</b> &mdash; PREX Method container patch: byte-identical video track, 10&times; audio sample table, normal playback speed.</li>
+        <li><b>v1.x</b> &mdash; Inflate-frames patcher (legacy, kept for compatibility).</li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<!-- free vip claim modal -->
+<div class="fv-overlay" id="fv-overlay" role="dialog" aria-modal="true" aria-labelledby="fv-title" style="display:none">
+  <div class="fv-card">
+    <div class="fv-shine"></div>
+    <div class="fv-sp s1"></div><div class="fv-sp s2"></div><div class="fv-sp s3"></div>
+    <div class="fv-crown"><svg viewBox="0 0 24 24" fill="#fcd34d"><path d="M2.8 7.4 7.2 11l4.8-5.8L16.8 11l4.4-3.6-2 10.6a2 2 0 0 1-2 1.7H6.8a2 2 0 0 1-2-1.7L2.8 7.4Z"/></svg></div>
+    <div class="fv-kicker">Free VIP &middot; Claim your access</div>
+    <div class="fv-title" id="fv-title">Your FREE VIP is activated</div>
+    <div class="fv-sub">Unlimited optimization, <b>4K &amp; 120fps</b> — already live on your account. Claim it and get back to your uploads.</div>
+    <div class="fv-perks">
+      <span class="fv-perk"><svg viewBox="0 0 24 24" fill="none" stroke="#fcd34d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> Unlimited uses</span>
+      <span class="fv-perk"><svg viewBox="0 0 24 24" fill="none" stroke="#fcd34d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> 4K resolution</span>
+      <span class="fv-perk"><svg viewBox="0 0 24 24" fill="none" stroke="#fcd34d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg> 120fps</span>
+    </div>
+    <div class="fv-clock-lab">VIP expires in</div>
+    <div class="fv-clock">
+      <div class="fv-cd"><b id="fv-h">00</b><i>Hours</i></div>
+      <div class="fv-cd"><b id="fv-m">00</b><i>Minutes</i></div>
+      <div class="fv-cd"><b id="fv-s">00</b><i>Seconds</i></div>
+    </div>
+    <div class="fv-ends"><span class="ld"></span><span id="fv-ends">—</span></div>
+    <button class="fv-cta" id="fv-cta">CLAIM FREE VIP <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14m0 0-6-6m6 6-6 6"/></svg></button>
+    <div class="fv-foot">No trick, no limit restored — <b>this window is already active for you</b>. Claim it once and the studio unlocks instantly.</div>
+  </div>
+</div>
+
+<!-- toasts -->
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<!-- sticky action bar -->
+<div class="action-bar" id="action-bar">
+  <div class="ab-chips">
+    <span class="ab-chip accent" id="ab-mode">PREX Method</span>
+    <span class="ab-chip ab-chip-file" id="ab-file">no file loaded</span>
+  </div>
+  <div class="ab-progress">
+    <div class="progress"><div class="progress-fill" id="ab-fill"></div></div>
+    <span class="progress-pct" id="ab-pct">0%</span>
+    <span class="ab-stage" id="ab-stage">Ready</span>
+  </div>
+  <div class="ab-actions">
+    <button class="btn primary" id="process-btn" disabled>Optimize video</button>
+    <div class="done-pill hidden" id="done-btn"><span class="done-check"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> This video is optimized</div>
+    <button class="btn download hidden" id="download-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12m0 0 5-5m-5 5-5-5"/><path d="M4 20h16"/></svg> Download -prex.mp4</button>
+    <button class="btn ghost hidden" id="another-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg> Optimize another video</button>
+    <button class="clear-btn" id="clear-btn" title="Remove video and start over" aria-label="Remove video"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  </div>
+  <div class="result-stats hidden" id="result-stats"></div>
+</div>
+</div>
+
+<!-- public landing (shown until authed) -->
+<div id="public-landing">
+  <div class="lp-grid"></div>
+  <div class="lp-glow lp-glow-a"></div>
+  <div class="lp-glow lp-glow-b"></div>
+  <div class="lp-glow lp-glow-c"></div>
+  <div class="maint-banner" id="maint-banner-landing" style="max-width:720px" aria-live="polite">
+    <div class="maint-ico"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4.5 4.5 0 0 0-5.4 0L3 10.5l3.6 6 6.3-4.2a4.5 4.5 0 0 0 0-5.4l1.8-1.6Z"/><path d="M21 13.5 13.5 21"/></svg></div>
+    <div class="maint-in">
+      <b>MAINTENANCE MODE</b>
+      <span id="maint-msg-landing"></span>
+    </div>
+  </div>
+  <div class="lp-wrap">
+    <header class="lp-header">
+      <div class="lp-brand">
+        <img src="logo.png" alt="PREX">
+        <div>
+          <div class="lp-t1">PREX METHOD</div>
+          <div class="lp-t2">Uploads engineered to survive TikTok</div>
+        </div>
+      </div>
+      <nav class="lp-nav">
+        <a class="lp-hide-m" href="#lp-features">Features</a>
+        <a class="lp-hide-m" href="#lp-pricing">Plans</a>
+        <a class="lp-btn discord sm" href="/login">Login</a>
+      </nav>
+    </header>
+
+    <section class="lp-hero">
+      <span class="lp-eyebrow">PREX METHOD &middot; v4.0</span>
+      <div><img class="lp-logo" src="logo.png" alt="PREX"></div>
+      <div class="lp-h1">Your uploads, engineered to survive TikTok.</div>
+      <p class="lp-tag">PREX Method restructures your MP4 so TikTok serves it at <b>full resolution and true frame rate</b> — no re-encoding, no quality loss, no editing inside TikTok.</p>
+      <div class="lp-cta">
+        <a class="lp-btn discord" href="/login">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="#fff"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.89-1.52.07.07 0 0 0-.08.04c-.21.38-.45.87-.61 1.26a18.3 18.3 0 0 0-5.48 0 12.6 12.6 0 0 0-.62-1.26.08.08 0 0 0-.08-.04 19.7 19.7 0 0 0-4.88 1.52.07.07 0 0 0-.04.03C.53 9.05-.32 13.58.1 18.06a.08.08 0 0 0 .03.05 19.9 19.9 0 0 0 5.99 3.03.08.08 0 0 0 .08-.03c.46-.63.87-1.3 1.22-2a.08.08 0 0 0-.04-.11 13.1 13.1 0 0 1-1.87-.9.08.08 0 0 1-.01-.12c.13-.09.25-.19.37-.29a.07.07 0 0 1 .08-.01 14.2 14.2 0 0 0 12.06 0 .07.07 0 0 1 .08.01c.12.1.25.2.37.29a.08.08 0 0 1 0 .12c-.6.35-1.22.65-1.88.9a.08.08 0 0 0-.04.11c.36.7.77 1.37 1.22 2a.08.08 0 0 0 .08.03 19.8 19.8 0 0 0 6-3.03.08.08 0 0 0 .03-.05c.5-5.18-.84-9.68-3.55-13.66a.06.06 0 0 0-.04-.03ZM8.02 15.33c-1.18 0-2.16-1.08-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.34-.96 2.42-2.16 2.42Zm7.97 0c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.22 0 2.18 1.1 2.16 2.42 0 1.34-.94 2.42-2.16 2.42Z"/></svg>
+          Login with Discord
+        </a>
+        <a class="lp-btn ghost" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener">Join the Discord server</a>
+      </div>
+      <div class="lp-pills">
+        <span class="lp-pill">Byte-identical video</span>
+        <span class="lp-pill">60 / 120 fps kept</span>
+        <span class="lp-pill">Any editor works</span>
+        <span class="lp-pill">Runs in your browser</span>
+      </div>
+    </section>
+
+    <div class="lp-stats">
+      <div class="lp-stats-label">LIVE STUDIO STATUS</div>
+      <div class="lp-stats-grid">
+        <div class="lp-stat"><div class="lp-num" id="s-size">—</div><div class="lp-cap">TOTAL SIZE OPTIMIZED</div><div class="lp-live"><span class="dot"></span>LIVE</div></div>
+        <div class="lp-stat"><div class="lp-num" id="s-total">—</div><div class="lp-cap">FILES OPTIMIZED</div><div class="lp-live"><span class="dot"></span>LIVE</div></div>
+        <div class="lp-stat"><div class="lp-num" id="s-today">—</div><div class="lp-cap">TODAY</div><div class="lp-live"><span class="dot"></span>LIVE</div></div>
+        <div class="lp-stat"><div class="lp-num" id="s-month">—</div><div class="lp-cap">THIS MONTH</div><div class="lp-live"><span class="dot"></span>LIVE</div></div>
+      </div>
+    </div>
+
+    <div id="landing-marketing">
+      <section class="lp-sec" id="lp-features">
+        <div class="lp-sec-head"><div class="lp-k">WHY PREX</div><div class="lp-h2">Built so TikTok can't wreck your quality</div><div class="lp-p">Every export from CapCut, DaVinci, Premiere or your phone gets rebuilt the right way — before it ever reaches TikTok.</div></div>
+        <div class="lp-feat-grid">
+          <div class="lp-feat"><div class="lp-fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8Z"/></svg></div><h3>Zero re-encoding</h3><p>PREX rebuilds the container only — your video data stays byte-identical. No quality pass, no generation loss.</p></div>
+          <div class="lp-feat"><div class="lp-fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h3l2.5-7 4 14 2.5-7h8"/></svg></div><h3>True fps preserved</h3><p>60 and 120 fps sources keep their frame rate. TikTok serves your full resolution instead of re-compressing to SD.</p></div>
+          <div class="lp-feat"><div class="lp-fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 15h10"/></svg></div><h3>Any editor works</h3><p>H.264 exports stay lossless. Non-H.264 files are automatically converted to a clean H.264+AAC master — upload always succeeds.</p></div>
+          <div class="lp-feat"><div class="lp-fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg></div><h3>Check what TikTok serves</h3><p>Paste any video link and see the exact served resolution, bitrate and fps — proof your upload survived.</p></div>
+          <div class="lp-feat"><div class="lp-fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><h3>Runs in your browser</h3><p>Everything happens client-side with in-browser FFmpeg. Your video never leaves your machine.</p></div>
+          <div class="lp-feat"><div class="lp-fic"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#c4b5fd" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div><h3>No ban risk</h3><p>PREX never touches TikTok — no sessions, no injections, no account interaction. It only edits your file.</p></div>
+        </div>
+      </section>
+
+      <section class="lp-sec" id="lp-how">
+        <div class="lp-sec-head"><div class="lp-k">HOW IT WORKS</div><div class="lp-h2">Three steps. Thirty seconds.</div></div>
+        <div class="lp-steps">
+          <div class="lp-step"><div class="lp-n">1</div><h3>Export from your editor</h3><p>CapCut, DaVinci, Premiere, Filmora — any software. Export as MP4, H.264 if you can.</p></div>
+          <div class="lp-step"><div class="lp-n">2</div><h3>Drop it in the studio</h3><p>PREX restructures the container instantly. H.264 files come out byte-identical; everything else is auto-fixed.</p></div>
+          <div class="lp-step"><div class="lp-n">3</div><h3>Upload from your PC</h3><p>Post on tiktok.com with high-quality uploads ON, then verify with the Check tab.</p></div>
+        </div>
+      </section>
+
+      <section class="lp-sec" id="lp-faq">
+        <div class="lp-sec-head"><div class="lp-k">FAQ</div><div class="lp-h2">Questions members ask</div></div>
+        <div class="lp-faq">
+          <div class="lp-qa"><b>Will my video be re-compressed?</b><span>No. For H.264 sources the video track is byte-identical — TikTok sees the file as already optimized. Non-H.264 files get one clean H.264 conversion (CRF 14, near-lossless) so the upload always succeeds.</span></div>
+          <div class="lp-qa"><b>Does it work with 120 fps?</b><span>Yes. 120 fps sources are supported and keep their frame structure; TikTok displays up to 60 fps, but the served quality stays full-resolution and sharp.</span></div>
+          <div class="lp-qa"><b>Is my video uploaded to your server?</b><span>Never. Everything runs in your browser with in-browser FFmpeg. Only anonymized counters are sent to the studio.</span></div>
+          <div class="lp-qa"><b>How do I subscribe?</b><span>Join the Discord server, pay the $8/month, and you're in. Sign in with Discord and the studio unlocks.</span></div>
+          <div class="lp-qa"><b>What if my upload still fails?</b><span>The studio auto-converts any codec to H.264+AAC, so uploads are compatible by construction. Use the Check tab to verify what TikTok serves after posting.</span></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="lp-sec" id="lp-pricing">
+      <div class="lp-sec-head">
+        <div class="lp-k">PLANS</div>
+        <div class="lp-h2">Pick your tier.</div>
+        <div class="lp-p">Free to start, boost to grow, VIP for unlimited everything — 4K, 120fps and full support. Promoters get the VIP pass for free.</div>
+      </div>
+
+      <div class="tier-grid">
+        <!-- Member -->
+        <div class="tier-card tier-member">
+          <div class="tier-head">
+            <span class="tier-ic tier-ic-member"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1.5 2.5 4 4 4 4H8s2.5-1.5 4-4Z"/><path d="M5 10c0 4 2.5 7 7 7s7-3 7-7H5Z"/><path d="M12 17v4"/></svg></span>
+            <div class="tier-name">MEMBER</div>
+            <div class="tier-tag">Start free. Upgrade when you grow.</div>
+          </div>
+          <div class="tier-price">$0<span>free forever</span></div>
+          <ul class="tier-list">
+            <li class="ok">7× usage per week</li>
+            <li class="ok">Up to 1080p • 60fps</li>
+            <li class="ok">PREX Method optimizer</li>
+            <li class="ok">Check video tool</li>
+            <li class="no">4K / 120fps output</li>
+          </ul>
+          <a class="tier-cta tier-member" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener">Join the community free</a>
+        </div>
+
+        <!-- Booster -->
+        <div class="tier-card tier-booster">
+          <div class="tier-head">
+            <span class="tier-ic tier-ic-booster"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8-.8-.7-2.2-.7-3 .8Z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.9 12.9 0 0 1 22 2c0 2.72-.78 7.5-6 11a22 22 0 0 1-4 2Z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></svg></span>
+            <div class="tier-name">BOOSTER</div>
+            <div class="tier-tag">Drop a server boost — double your weekly usage.</div>
+          </div>
+          <div class="tier-price">BOOST<span>the server</span></div>
+          <ul class="tier-list">
+            <li class="ok">15× usage per week</li>
+            <li class="ok">Up to 1080p • 60fps</li>
+            <li class="ok">All Member perks</li>
+            <li class="ok">Booster role in Discord</li>
+            <li class="no">4K / 120fps output</li>
+          </ul>
+          <a class="tier-cta tier-booster" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener">Boost the PREX server</a>
+          <div class="tier-note">Requires an active server boost (Discord Nitro).</div>
+        </div>
+
+        <!-- VIP -->
+        <div class="tier-card tier-vip">
+          <div class="tier-badge">BEST SELLER</div>
+          <span class="spark s1"></span><span class="spark s2"></span><span class="spark s3"></span>
+          <div class="tier-head">
+            <span class="tier-ic tier-ic-vip"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11.56 2.5 8.6 8.06l-6.1.53 4.6 4.04-1.36 6L12 15.5l6.26 3.13-1.36-6 4.6-4.04-6.1-.53L11.56 2.5Z"/></svg></span>
+            <div class="tier-name">VIP</div>
+            <div class="tier-tag">Unlimited. The full engine. Zero compromises.</div>
+          </div>
+          <div class="tier-price">Contributor</div>
+          <ul class="tier-list">
+            <li class="ok">Unlimited usage</li>
+            <li class="ok">Up to 4K • 120fps</li>
+            <li class="ok">Full support</li>
+            <li class="ok">Real-time studio stats</li>
+            <li class="ok">Priority feature updates</li>
+          </ul>
+          <a class="tier-cta tier-vip" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.735H5.81a1 1 0 0 1-.957-.735L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M20 21H4"/></svg>Join Contributor</a>
+        </div>
+      </div>
+
+      <div class="promo-box">
+        <div class="promo-grid">
+          <div class="promo-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg></div>
+          <div>
+            <div class="promo-title">PROMOTER <span class="promo-tag">FREE</span></div>
+            <div class="promo-tagline">Promote the method per our <b>desired requirements</b> — and you <b>instantly receive the full VIP pass</b>. No payment, no waiting.</div>
+          </div>
+<a class="promo-cta" href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>Become a Promoter</a>
+        </div>
+        <div class="promo-chips">
+          <span class="promo-chip">∞ UNLIMITED</span>
+          <span class="promo-chip">4K • 120FPS</span>
+          <span class="promo-chip">GOLD BADGE</span>
+        </div>
+        <div class="promo-steps">
+          <div class="promo-step"><span class="ps-num">1</span>Get the <b>Promoter role</b> in Discord</div>
+          <span class="promo-arrow">→</span>
+          <div class="promo-step"><span class="ps-num">2</span>Promote the method per the <b>requirements</b></div>
+          <span class="promo-arrow">→</span>
+          <div class="promo-step"><span class="ps-num">3</span>Receive <b>VIP instantly</b> — 4K • 120fps • ∞</div>
+        </div>
+      </div>
+
+      <div class="tier-cmp-wrap">
+        <div class="lp-k cmp-label">COMPARE TIERS</div>
+        <div class="tier-cmp-box">
+          <table class="tier-cmp">
+            <thead>
+              <tr><th></th><th class="c-member">Member</th><th class="c-booster">Booster</th><th class="c-vip">VIP</th><th class="c-promoter">Promoter</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Usage / week</td><td class="c-d1">7×</td><td class="c-d2">15×</td><td class="c-d3">Unlimited</td><td class="c-d4">Unlimited</td></tr>
+              <tr><td>Max resolution</td><td class="c-d1">1080p</td><td class="c-d2">1080p</td><td class="c-d3">4K</td><td class="c-d4">4K</td></tr>
+              <tr><td>Frame rate</td><td class="c-d1">60fps</td><td class="c-d2">60fps</td><td class="c-d3">120fps</td><td class="c-d4">120fps</td></tr>
+              <tr><td>Support</td><td class="c-d1">Community</td><td class="c-d2">Community</td><td class="c-d3">Full support + instant</td><td class="c-d4">Full support</td></tr>
+              <tr><td>Price</td><td class="c-d1">$0</td><td class="c-d2">Server boost</td><td class="c-d3"><span class="c-pill">Contributor</span></td><td class="c-d4"><span class="c-pill gold">FREE</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="lp-p" style="text-align:center;margin-top:16px">Every tier includes the PREX Method optimizer and Check video. VIP unlocks everything — the way the engine was meant to be used. Promoter = the free VIP pass: promote the method per requirements and the tier unlocks instantly.</div>
+      </div>
+    </section>
+
+    <footer class="lp-foot">
+      <div class="lp-foot-links">
+        <a href="/login">Login</a>
+        <a href="/accesspass">Access pass</a>
+        <a href="/admin">Admin</a>
+        <a href="https://discord.gg/5jcnyj9Bbe" target="_blank" rel="noopener">Discord</a>
+      </div>
+      <div class="lp-cp">PREX Method &middot; TikTok Upload Studio &middot; Independent tool — not affiliated with TikTok or ByteDance.</div>
+    </footer>
+  </div>
+</div>
+
+<script src="ffmpeg.js"></script>
+<script src="inflate.js"></script>
+<script src="prex.js"></script>
+<script src="kuronai-engine.js"></script>
+<script src="app.js"></script>
+<script src="features.js"></script>
+<script>
+  function $(id) { return document.getElementById(id); }
+  var roleBadge = $('role-badge');
+
+  function setAuth(v) {
+    document.body.classList.toggle('auth', v);
+  }
+
+  function cloneMarketing() {
+    var src = $('landing-marketing');
+    var dst = $('overview-marketing');
+    if (src && dst && !dst.hasChildNodes()) {
+      var clone = src.cloneNode(true);
+      clone.id = '';
+      dst.appendChild(clone);
+    }
+  }
+
+  function setAvatar(el, url, initial, title) {
+    if (!el) return;
+    el.hidden = false;
+    el.style.background = 'linear-gradient(135deg,#7c3aed,#a855f7 45%,#e879f9 92%)';
+    el.textContent = initial;
+    if (title) el.title = title;
+    var olds = Array.prototype.slice.call(el.querySelectorAll('.avatar-img'));
+    olds.forEach(function (o) { o.remove(); });
+    if (url) {
+      var img = document.createElement('img');
+      img.className = 'avatar-img';
+      img.crossOrigin = 'anonymous';
+      img.draggable = false;
+      img.alt = '';
+      img.referrerPolicy = 'no-referrer';
+      img.onerror = function () { try { img.remove(); } catch (e) {} };
+      el.appendChild(img);
+      img.src = url;
+    }
+  }
+
+  function fillMe(j) {
+    var dashName = $('dash-name');
+    var dashAvatar = $('dash-avatar');
+    var dashRole = $('dash-role');
+    var dashSession = $('dash-session');
+    var dashTier = $('dash-tier');
+    var hd = $('hd-avatar');
+    if (j.owner) {
+      roleBadge.hidden = false;
+      $('admin-chip').hidden = false;
+      dashName.textContent = 'Owner';
+      dashRole.textContent = 'MASTER ADMIN — full studio control';
+      setAvatar(dashAvatar, null, 'P');
+      setAvatar(hd, null, 'P', 'Owner');
+      dashSession.textContent = 'Permanent owner session. Manage access passes and windows from /admin.';
+      if (dashTier) { dashTier.textContent = 'UNLIMITED — OWNER ACCESS'; dashTier.style.color = '#34d97b'; }
+    } else {
+      roleBadge.hidden = true;
+      $('admin-chip').hidden = true;
+      if (j.discord && j.discord.username) {
+        var dispName = j.discord.global_name || j.discord.username;
+        dashName.textContent = dispName;
+        dashRole.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="#5865F2" style="vertical-align:-2px;margin-right:5px"><path d="M20.32 4.37a19.8 19.8 0 0 0-4.89-1.52.07.07 0 0 0-.08.04c-.21.38-.45.87-.61 1.26a18.3 18.3 0 0 0-5.48 0 12.6 12.6 0 0 0-.62-1.26.08.08 0 0 0-.08-.04 19.7 19.7 0 0 0-4.88 1.52.07.07 0 0 0-.04.03C.53 9.05-.32 13.58.1 18.06a.08.08 0 0 0 .03.05 19.9 19.9 0 0 0 5.99 3.03.08.08 0 0 0 .08-.03c.46-.63.87-1.3 1.22-2a.08.08 0 0 0-.04-.11 13.1 13.1 0 0 1-1.87-.9.08.08 0 0 1-.01-.12c.13-.09.25-.19.37-.29a.07.07 0 0 1 .08-.01 14.2 14.2 0 0 0 12.06 0 .07.07 0 0 1 .08.01c.12.1.25.2.37.29a.08.08 0 0 1 0 .12c-.6.35-1.22.65-1.88.9a.08.08 0 0 0-.04.11c.36.7.77 1.37 1.22 2a.08.08 0 0 0 .08.03 19.8 19.8 0 0 0 6-3.03.08.08 0 0 0 .03-.05c.5-5.18-.84-9.68-3.55-13.66a.06.06 0 0 0-.04-.03ZM8.02 15.33c-1.18 0-2.16-1.08-2.16-2.42 0-1.33.96-2.42 2.16-2.42 1.21 0 2.18 1.1 2.16 2.42 0 1.34-.96 2.42-2.16 2.42Zm7.97 0c-1.18 0-2.15-1.08-2.15-2.42 0-1.33.95-2.42 2.15-2.42 1.22 0 2.18 1.1 2.16 2.42 0 1.34-.94 2.42-2.16 2.42Z"/></svg>Discord member <span style="color:#34d97b;margin-left:4px">&#10003;</span>';
+        var initials = (j.discord.global_name || j.discord.username || 'U').charAt(0).toUpperCase();
+        setAvatar(dashAvatar, j.discord.avatarUrl || '', initials);
+        setAvatar(hd, j.discord.avatarUrl || '', initials, dispName);
+        if (dashTier) {
+          var tt = (j.tier || '').toUpperCase();
+          var tu = j.usage || {};
+          if (j.tier === 'vip') {
+            dashTier.textContent = 'VIP — 4K • 120fps • UNLIMITED';
+            dashTier.style.color = '#e879f9';
+          } else if (j.tier === 'promoter') {
+            dashTier.textContent = 'PROMOTER — VIP PASS • 4K • 120fps • UNLIMITED';
+            dashTier.style.color = '#fcd34d';
+          } else if (j.tier === 'member' || j.tier === 'booster') {
+            if (j.freeMode) {
+              var until = j.freeUntil ? new Date(j.freeUntil).toLocaleString() : 'soon';
+              dashTier.textContent = 'FREE USAGE ACTIVE — unlimited VIP (4K • 120fps) until ' + until;
+              dashTier.style.color = '#34d97b';
+            } else {
+              dashTier.textContent = tt + ' — ' + tu.used + ' of ' + tu.limit + ' uses left · auto-resets every Monday (Manila time)';
+              dashTier.style.color = tu.used >= tu.limit ? '#ff4d6d' : '#e9d5ff';
+            }
+          } else {
+            dashTier.textContent = 'NO ACTIVE TIER ROLE — contact admin';
+            dashTier.style.color = '#ff4d6d';
+          }
+          if (j.ipLocked) {
+            dashTier.textContent += ' · IP MISMATCH — contact admin';
+            dashTier.style.color = '#ff4d6d';
+          }
+        }
+      } else {
+        dashName.textContent = 'Editor (access pass)';
+        dashRole.textContent = 'Access pass session';
+        setAvatar(dashAvatar, null, 'E');
+        setAvatar(hd, null, 'E', 'Access pass');
+        if (dashTier) { dashTier.textContent = 'EXEMPT — OWNER-MANAGED ACCESS'; dashTier.style.color = '#e9d5ff'; }
+      }
+      dashSession.textContent = 'Your session stays active while you are signed in — usage is what your tier limits. Your uses auto-reset every Monday 12AM (Manila time). VIP is unlimited.';
+    }
+  }
+
+  /* ---------- free vip claim modal ---------- */
+  var fvUntil = 0;
+  var fvStampKey = '';
+  var fvTimer = null;
+  function pad2(n) { return (n < 10 ? '0' : '') + n; }
+  function fvStamp() { try { return localStorage.getItem('prexFreeClaimed') || ''; } catch (e) { return ''; } }
+  function fvSet(v) { try { localStorage.setItem('prexFreeClaimed', v); } catch (e) {} }
+  function fvToast(msg) {
+    var box = $('toasts');
+    if (!box) return;
+    var el = document.createElement('div');
+    el.className = 'toast ok';
+    el.innerHTML = '<span class="t-icon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span class="t-text"></span><button class="t-close" aria-label="Dismiss"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>';
+    el.querySelector('.t-text').textContent = msg;
+    box.appendChild(el);
+    while (box.children.length > 3) box.firstChild.remove();
+    var kill = function () {
+      if (el.classList.contains('out')) { el.remove(); return; }
+      el.classList.add('out');
+      setTimeout(function () { el.remove(); }, 300);
+    };
+    el.querySelector('.t-close').addEventListener('click', kill);
+    setTimeout(kill, 5000);
+  }
+  function fvSync() {
+    var ms = fvUntil - Date.now();
+    if (ms <= 0) { closeFv(); return; }
+    var s = Math.floor(ms / 1000);
+    var h = Math.floor(s / 3600);
+    var m = Math.floor((s % 3600) / 60);
+    var sec = s % 60;
+    var eh = $('fv-h'), em = $('fv-m'), es = $('fv-s');
+    if (eh) eh.textContent = pad2(h);
+    if (em) em.textContent = pad2(m);
+    if (es) es.textContent = pad2(sec);
+  }
+  function closeFv() {
+    clearInterval(fvTimer);
+    fvTimer = null;
+    var ov = $('fv-overlay');
+    if (ov) { ov.classList.remove('open'); ov.style.display = 'none'; }
+    var html = document.documentElement;
+    html.classList.remove('fvs-lock');
+    html.style.overflow = '';
+  }
+  function maybeShowFreeClaim(j) {
+    var ov = $('fv-overlay');
+    if (!ov || !j) return;
+    if (j.owner || !j.freeMode || !j.freeUntil) return;
+    if (j.tier !== 'member' && j.tier !== 'booster') return;
+    var until = Number(new Date(j.freeUntil));
+    if (!(until > Date.now())) return;
+    var stamp = String(j.freeUntil);
+    if (fvStamp() === stamp) return;
+    fvStampKey = stamp;
+    fvUntil = until;
+    var ends = $('fv-ends');
+    if (ends) ends.textContent = 'Ends ' + new Date(until).toLocaleString();
+    ov.classList.add('open');
+    ov.style.display = 'flex';
+    var html = document.documentElement;
+    html.style.overflow = 'hidden';
+    fvSync();
+    fvTimer = setInterval(fvSync, 1000);
+  }
+  function bindFv() {
+    var cta = $('fv-cta');
+    if (!cta) return;
+    cta.addEventListener('click', function () {
+      if (fvStampKey) fvSet(fvStampKey);
+      closeFv();
+      var ends = new Date(fvUntil).toLocaleString();
+      fvToast('Free VIP claimed — unlimited usage active until ' + ends + '. Enjoy!');
+    });
+  }
+
+
+  function whoAmI() {
+    fetch('api/me', { cache: 'no-store', credentials: 'same-origin' })
+      .then(function (r) { if (r.status === 401) throw new Error('no session'); return r.json(); })
+      .then(function (j) {
+        if (!j || !j.ok) return;
+        setAuth(true);
+        cloneMarketing();
+        fillMe(j);
+        maybeShowFreeClaim(j);
+        setTimeout(function () {
+          try { window.dispatchEvent(new Event('resize')); } catch (e) {}
+        }, 180);
+      })
+      .catch(function () { setAuth(false); });
+  }
+
+  function fmtN(n) {
+    if (n == null || isNaN(n)) return '—';
+    if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+    if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+    return String(n);
+  }
+  function fmtBytes(n) {
+    n = Number(n) || 0;
+    if (n <= 0) return '0 MB';
+    if (n >= 1073741824) return (n / 1073741824).toFixed(2) + ' GB';
+    if (n >= 1048576) return (n / 1048576).toFixed(1) + ' MB';
+    if (n >= 1024) return (n / 1024).toFixed(1) + ' KB';
+    return n + ' B';
+  }
+  function renderDash(s) {
+    var sSize = $('s-size');
+    if (sSize) sSize.textContent = fmtBytes(s.totalBytes);
+    if ($('s-total')) $('s-total').textContent = fmtN(s.uploadsTotal);
+    if ($('s-today')) $('s-today').textContent = fmtN(s.uploadsToday);
+    if ($('s-month')) $('s-month').textContent = fmtN(s.uploadsThisMonth);
+    if ($('d-size')) $('d-size').textContent = fmtBytes(s.totalBytes);
+    if ($('d-total')) $('d-total').textContent = fmtN(s.uploadsTotal);
+    if ($('d-today')) $('d-today').textContent = fmtN(s.uploadsToday);
+    if ($('d-month')) $('d-month').textContent = fmtN(s.uploadsThisMonth);
+    var rl = $('recent-list');
+    if (rl) {
+      if (s.recent && s.recent.length) {
+        rl.innerHTML = '';
+        s.recent.forEach(function (r, idx) {
+          var row = document.createElement('div');
+          row.className = 'recent-row';
+          row.style.animationDelay = (idx * 60) + 'ms';
+          var av = document.createElement('span');
+          av.className = 'recent-av';
+          av.textContent = (r.name || 'M').charAt(0).toUpperCase();
+          if (r.avatar) {
+            var img = document.createElement('img');
+            img.className = 'avatar-img';
+            img.crossOrigin = 'anonymous';
+            img.draggable = false;
+            img.alt = '';
+            img.referrerPolicy = 'no-referrer';
+            img.onerror = function () { try { img.remove(); } catch (e) {} };
+            av.appendChild(img);
+            img.src = r.avatar;
+          }
+          var nm = document.createElement('span');
+          nm.className = 'recent-name';
+          nm.textContent = r.name || 'Member';
+          nm.title = r.name || '';
+          var meta = document.createElement('span');
+          meta.className = 'recent-meta';
+          var parts = [];
+          if (r.bytes) parts.push(fmtBytes(r.bytes));
+          if (r.w && r.h) parts.push(r.w + '×' + r.h);
+          meta.textContent = parts.join(' · ');
+          if (r.tier) {
+            var tg = document.createElement('span');
+            tg.className = 'recent-tier ' + r.tier;
+            tg.textContent = r.tier;
+            meta.appendChild(tg);
+          }
+          row.appendChild(av);
+          row.appendChild(nm);
+          row.appendChild(meta);
+          rl.appendChild(row);
+        });
+      } else {
+        rl.innerHTML = '<div class="hint" style="margin-top:8px">No uploads yet — be the first to optimize.</div>';
+      }
+    }
+    var bars = $('dash-bars');
+    if (!bars || !s.uploadsByDay) return;
+    var max = 1;
+    s.uploadsByDay.forEach(function (b) { if (b.count > max) max = b.count; });
+    bars.innerHTML = '';
+    s.uploadsByDay.forEach(function (b) {
+      var el = document.createElement('div');
+      el.className = 'dash-bar';
+      var h = Math.max(2, Math.round((b.count / max) * 58));
+      el.innerHTML = '<span class="cnt">' + b.count + '</span><div class="fill' + (b.count === 0 ? ' zero' : '') + '" style="height:' + h + 'px"></div><span class="lab">' + b.date.slice(5) + '</span>';
+      bars.appendChild(el);
+    });
+  }
+  function refreshDash() {
+    fetch('api/stats', { cache: 'no-store', credentials: 'same-origin' })
+      .then(function (r) { return r.json(); })
+      .then(renderDash)
+      .catch(function () {});
+  }
+  refreshDash();
+  window.__prexStatsRefresh = refreshDash;
+  setInterval(refreshDash, 5000);
+  whoAmI();
+  bindFv();
+  setInterval(whoAmI, 30000);
+  (function accentHook() {
+    function setAccent() {
+      var el = document.querySelector('.tab.active');
+      document.documentElement.dataset.accent = (el && el.dataset && el.dataset.tab) || 'overview';
+    }
+    var tabs = document.querySelector('#tabs') || document;
+    try { new MutationObserver(setAccent).observe(tabs, { attributes: true, subtree: true, attributeFilter: ['class'] }); } catch (e) {}
+    setAccent();
+  })();
+</script>
+
+<script>
+/* ui.js — PREX Optimizer: theme (light/dark/system), command palette (Ctrl+K), toasts.
+   Additive enhancement only. Fully guarded so any failure never breaks the page. */
+(function () {
+  'use strict';
+
+  function init() {
+    try { runTheme(); } catch (e) { console.warn('[ui] theme init failed', e); }
+    try { runPalette(); } catch (e) { console.warn('[ui] palette init failed', e); }
+    try { runToasts(); } catch (e) { console.warn('[ui] toast init failed', e); }
+  }
+
+  /* ---------------- THEME ---------------- */
+  var THEME_KEY = 'prex-theme';
+  function systemPref() {
+    return (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+  }
+  function applyTheme(theme) {
+    var eff = theme === 'system' ? systemPref() : theme;
+    var root = document.documentElement;
+    if (eff === 'light') root.setAttribute('data-theme', 'light');
+    else root.removeAttribute('data-theme');
+    var btn = document.getElementById('ui-theme-btn');
+    if (btn) { btn.setAttribute('aria-label', 'Theme: ' + theme); btn.dataset.theme = theme; }
+  }
+  function getTheme() { try { return localStorage.getItem(THEME_KEY) || 'system'; } catch (e) { return 'system'; } }
+  function setTheme(t) { try { localStorage.setItem(THEME_KEY, t); } catch (e) {} applyTheme(t); }
+
+  function runTheme() {
+    applyTheme(getTheme());
+    if (window.matchMedia) {
+      try {
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function () {
+          if (getTheme() === 'system') applyTheme('system');
+        });
+      } catch (e) {}
+    }
+    var btn = document.createElement('button');
+    btn.id = 'ui-theme-btn';
+    btn.className = 'ui-fab ui-theme-btn';
+    btn.type = 'button';
+    btn.title = 'Toggle theme (Light / Dark / System)';
+    btn.innerHTML = '<span class="ui-theme-ico" aria-hidden="true"></span>';
+    btn.addEventListener('click', function () {
+      var cur = getTheme();
+      var next = cur === 'system' ? 'light' : cur === 'light' ? 'dark' : 'system';
+      setTheme(next);
+    });
+    document.body.appendChild(btn);
+  }
+
+  /* ---------------- COMMAND PALETTE ---------------- */
+  var paletteOpen = null;
+  function runPalette() {
+    var wrap = document.createElement('div');
+    wrap.id = 'ui-cmdk';
+    wrap.className = 'ui-cmdk';
+    wrap.setAttribute('role', 'dialog');
+    wrap.setAttribute('aria-modal', 'true');
+    wrap.innerHTML =
+      '<div class="ui-cmdk-box">' +
+      '<input class="ui-cmdk-input" type="text" placeholder="Search or type a command…" aria-label="Command palette">' +
+      '<div class="ui-cmdk-list" role="listbox"></div>' +
+      '<div class="ui-cmdk-hint">↑↓ navigate · ↵ open · esc close · ⌘K toggle</div>' +
+      '</div>';
+    wrap.style.display = 'none';
+    document.body.appendChild(wrap);
+    var input = wrap.querySelector('.ui-cmdk-input');
+    var list = wrap.querySelector('.ui-cmdk-list');
+
+    var actions = [
+      { label: 'Go to Optimizer', href: '/' },
+      { label: 'Go to Login', href: '/login.html' },
+      { label: 'Go to Dashboard', href: '/admin.html' },
+      { label: 'Go to Access', href: '/access.html' },
+      { label: 'Set Light theme', run: function () { setTheme('light'); } },
+      { label: 'Set Dark theme', run: function () { setTheme('dark'); } },
+      { label: 'Set System theme', run: function () { setTheme('system'); } }
+    ];
+    try {
+      document.querySelectorAll('a[href]').forEach(function (a) {
+        var h = a.getAttribute('href');
+        if (!h || h.charAt(0) === '#' || h.indexOf('javascript:') === 0) return;
+        var txt = (a.textContent || '').trim();
+        if (!txt) return;
+        actions.push({ label: txt, href: h });
+      });
+    } catch (e) {}
+
+    function render(q) {
+      q = (q || '').toLowerCase();
+      list.innerHTML = '';
+      var hits = actions.filter(function (a) {
+        return !q || (a.label || '').toLowerCase().indexOf(q) !== -1;
+      }).slice(0, 12);
+      if (!hits.length) {
+        var e = document.createElement('div');
+        e.className = 'ui-cmdk-empty';
+        e.textContent = 'No results';
+        list.appendChild(e);
+        return;
+      }
+      hits.forEach(function (a, i) {
+        var it = document.createElement('div');
+        it.className = 'ui-cmdk-item' + (i === 0 ? ' active' : '');
+        it.setAttribute('role', 'option');
+        it.textContent = a.label;
+        it.addEventListener('click', function () { exec(a); });
+        it.addEventListener('mouseenter', function () { setActive(i); });
+        list.appendChild(it);
+      });
+    }
+    function setActive(i) {
+      var items = list.querySelectorAll('.ui-cmdk-item');
+      items.forEach(function (x, j) { x.classList.toggle('active', j === i); });
+    }
+    function exec(a) {
+      close();
+      if (a.run) { a.run(); return; }
+      if (a.href) { window.location.href = a.href; }
+    }
+    function open() {
+      wrap.style.display = 'flex';
+      input.value = '';
+      render('');
+      setTimeout(function () { try { input.focus(); } catch (e) {} }, 10);
+    }
+    function close() { wrap.style.display = 'none'; }
+
+    input.addEventListener('input', function () { render(input.value); });
+    input.addEventListener('keydown', function (e) {
+      var items = list.querySelectorAll('.ui-cmdk-item');
+      var idx = -1;
+      items.forEach(function (x, j) { if (x.classList.contains('active')) idx = j; });
+      if (e.key === 'ArrowDown') { e.preventDefault(); setActive(idx < items.length - 1 ? idx + 1 : 0); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); setActive(idx > 0 ? idx - 1 : items.length - 1); }
+      else if (e.key === 'Enter') {
+        e.preventDefault();
+        var filtered = actions.filter(function (x) { return !input.value || x.label.toLowerCase().indexOf(input.value.toLowerCase()) !== -1; });
+        if (filtered[idx]) exec(filtered[idx]);
+      } else if (e.key === 'Escape') { e.preventDefault(); close(); }
+    });
+    wrap.addEventListener('click', function (e) { if (e.target === wrap) close(); });
+    document.addEventListener('keydown', function (e) {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+        e.preventDefault();
+        if (wrap.style.display === 'flex') close(); else open();
+      }
+    });
+
+    var pbtn = document.createElement('button');
+    pbtn.className = 'ui-fab ui-palette-btn';
+    pbtn.type = 'button';
+    pbtn.title = 'Command palette (Ctrl+K)';
+    pbtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>';
+    pbtn.addEventListener('click', open);
+    document.body.appendChild(pbtn);
+    paletteOpen = open;
+  }
+
+  /* ---------------- TOASTS ---------------- */
+  function runToasts() {
+    var wrap = document.createElement('div');
+    wrap.id = 'ui-toast-wrap';
+    wrap.className = 'ui-toast-wrap';
+    document.body.appendChild(wrap);
+    window.uiToast = function (msg, type) {
+      try {
+        var t = document.createElement('div');
+        t.className = 'ui-toast' + (type ? ' ui-toast-' + type : '');
+        t.textContent = msg;
+        wrap.appendChild(t);
+        setTimeout(function () { t.classList.add('show'); }, 10);
+        setTimeout(function () {
+          t.classList.remove('show');
+          setTimeout(function () { if (t.parentNode) t.parentNode.removeChild(t); }, 300);
+        }, 3400);
+      } catch (e) {}
+    };
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
+
+</script>
+</body>
+</html>
