@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ka" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MOON METHOD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col font-sans antialiased selection:bg-brand-500 selection:text-slate-950">
+
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/50 backdrop-blur sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2 bg-brand-500/10 text-brand-500 rounded-lg border border-brand-500/20">
+                    <i class="fa-solid fa-moon text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-wide text-white">MOON METHOD</h1>
+                    <p class="text-xs text-slate-400">MOON METHOD Core Processing System</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    MOON METHOD Active
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Column: Upload & Engine Settings -->
+        <div class="lg:col-span-7 space-y-6">
+            
+            <!-- File Drop Area -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
+                <label class="block text-sm font-semibold text-slate-300 mb-3">ვიდეო ფაილის არჩევა</label>
+                <div id="dropZone" class="border-2 border-dashed border-slate-700 hover:border-brand-500 transition-colors rounded-xl p-8 text-center bg-slate-950/50 cursor-pointer group relative overflow-hidden">
+                    <input type="file" id="fileInput" accept="video/mp4,video/quicktime" class="hidden">
+                    <div class="space-y-3 relative z-10">
+                        <div class="w-14 h-14 bg-slate-800 text-slate-400 group-hover:text-brand-500 group-hover:bg-brand-500/10 rounded-full flex items-center justify-center mx-auto transition-all">
+                            <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-slate-200 font-medium">ჩააგდეთ MP4 / MOV ფაილი აქ ან <span class="text-brand-500 underline">აირჩიეთ</span></p>
+                            <p class="text-xs text-slate-500 mt-1">MOON METHOD Client-Side Engine</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- File Info Badge -->
+                <div id="fileInfo" class="hidden mt-4 p-3 bg-slate-800/60 rounded-lg border border-slate-700 flex items-center justify-between">
+                    <div class="flex items-center space-x-3 overflow-hidden">
+                        <i class="fa-solid fa-file-video text-brand-500 text-xl"></i>
+                        <div class="truncate">
+                            <p id="fileName" class="text-sm font-medium text-slate-200 truncate">video.mp4</p>
+                            <p id="fileSize" class="text-xs text-slate-400">0 MB</p>
+                        </div>
+                    </div>
+                    <button id="removeFile" class="text-slate-400 hover:text-red-400 p-1">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Configuration Panels -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+                <h2 class="text-base font-semibold text-slate-200 flex items-center gap-2">
+                    <i class="fa-solid fa-gears text-brand-500"></i> MOON METHOD პარამეტრები
+                </h2>
+
+                <div class="space-y-4">
+                    <!-- MOON METHOD Module 1 -->
+                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="enablePrex" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
+                                <span class="font-semibold text-sm text-slate-200">MOON METHOD - Density Engine</span>
+                            </label>
+                            <span class="text-xs text-slate-500">Ghost-FPS & Timescale</span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-900">
+                            <div>
+                                <label class="text-xs text-slate-400 block mb-1">FPS Multiplier</label>
+                                <select id="prexMultiplier" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs p-2 text-slate-200 focus:border-brand-500 focus:outline-none">
+                                    <option value="2">2x Density</option>
+                                    <option value="5" selected>5x Density (Default)</option>
+                                    <option value="10">10x Density</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="text-xs text-slate-400 block mb-1">Timescale Normalization</label>
+                                <select id="prexTimescale" class="w-full bg-slate-900 border border-slate-700 rounded-lg text-xs p-2 text-slate-200 focus:border-brand-500 focus:outline-none">
+                                    <option value="30000" selected>30000 Hz (Standard)</option>
+                                    <option value="60000">60000 Hz</option>
+                                    <option value="keep">უცვლელი</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MOON METHOD Module 2 -->
+                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="enableKrypton" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
+                                <span class="font-semibold text-sm text-slate-200">MOON METHOD - Metadata Sanitizer</span>
+                            </label>
+                            <span class="text-xs text-slate-500">Metadata & Track Injection</span>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-slate-900">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="sanitizeSignatures" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
+                                <span class="text-xs text-slate-300">ენკოდერების ხელმოწერების გასუფთავება</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="injectAacClone" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
+                                <span class="text-xs text-slate-300">AAC Clone ტრეკის დამატება</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- MOON METHOD Module 3 -->
+                    <div class="p-4 bg-slate-950 border border-slate-800 rounded-xl space-y-3">
+                        <div class="flex items-center justify-between">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="enableInflate" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
+                                <span class="font-semibold text-sm text-slate-200">MOON METHOD - Stream Optimizer</span>
+                            </label>
+                            <span class="text-xs text-slate-500">Padding & Faststart</span>
+                        </div>
+                        <div class="space-y-2 pt-2 border-t border-slate-900">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="fastStart" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
+                                <span class="text-xs text-slate-300">Faststart Normalization (`moov` ფაილის დასაწყისში)</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="stripSei" class="w-4 h-4 rounded text-brand-500 bg-slate-900 border-slate-700 focus:ring-brand-500" checked>
+                                <span class="text-xs text-slate-300">SEI NALU-ების მოცილება</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Process Button -->
+                <button id="processBtn" disabled class="w-full bg-brand-600 hover:bg-brand-500 disabled:bg-slate-800 disabled:text-slate-600 disabled:cursor-not-allowed text-slate-950 font-bold py-3.5 px-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-moon"></i> MOON METHOD - დამუშავების დაწყება
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Column: Logs & Output -->
+        <div class="lg:col-span-5 space-y-6 flex flex-col">
+            <!-- Console Box -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl flex-1 flex flex-col">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-base font-semibold text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-terminal text-brand-500"></i> MOON METHOD ლოგი
+                    </h2>
+                    <button id="clearLogs" class="text-xs text-slate-500 hover:text-slate-300">გასუფთავება</button>
+                </div>
+                
+                <div id="consoleLog" class="bg-slate-950 font-mono text-xs text-emerald-400 p-4 rounded-xl border border-slate-800 flex-1 overflow-y-auto max-h-[400px] min-h-[300px] space-y-1">
+                    <p class="text-slate-600">> MOON METHOD მზადაა. ატვირთეთ MP4 / MOV ფაილი...</p>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="mt-4 space-y-1">
+                    <div class="flex justify-between text-xs text-slate-400">
+                        <span>პროგრესი</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800">
+                        <div id="progressBar" class="bg-brand-500 h-full w-0 transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <!-- Download Area -->
+                <div class="mt-6">
+                    <button id="downloadBtn" class="hidden w-full bg-slate-100 hover:bg-white text-slate-950 font-bold py-3 px-4 rounded-xl transition-all shadow-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-download text-brand-600"></i> შენახვა (MOON_METHOD_Processed.mp4)
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Load external JS engines -->
+    <script src="prex.js"></script>
+    <script src="kuronai-engine.js"></script>
+    <script src="inflate.js"></script>
+
+    <!-- Application Controller Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const dropZone = document.getElementById('dropZone');
+            const fileInput = document.getElementById('fileInput');
+            const fileInfo = document.getElementById('fileInfo');
+            const fileName = document.getElementById('fileName');
+            const fileSize = document.getElementById('fileSize');
+            const removeFile = document.getElementById('removeFile');
+            const processBtn = document.getElementById('processBtn');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const consoleLog = document.getElementById('consoleLog');
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+
+            let currentFile = null;
+            let processedBuffer = null;
+
+            function log(msg, type = 'info') {
+                const p = document.createElement('p');
+                const time = new Date().toLocaleTimeString();
+                if (type === 'error') p.className = 'text-red-400';
+                else if (type === 'success') p.className = 'text-brand-400 font-bold';
+                else if (type === 'warn') p.className = 'text-yellow-400';
+                else p.className = 'text-slate-400';
+                
+                p.textContent = `[${time}] ${msg}`;
+                consoleLog.appendChild(p);
+                consoleLog.scrollTop = consoleLog.scrollHeight;
+            }
+
+            function updateProgress(percent) {
+                progressBar.style.width = `${percent}%`;
+                progressPercent.textContent = `${percent}%`;
+            }
+
+            // File selection UI
+            dropZone.addEventListener('click', () => fileInput.click());
+            
+            dropZone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                dropZone.classList.add('border-brand-500');
+            });
+
+            dropZone.addEventListener('dragleave', () => {
+                dropZone.classList.remove('border-brand-500');
+            });
+
+            dropZone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('border-brand-500');
+                if (e.dataTransfer.files.length) {
+                    handleFile(e.dataTransfer.files[0]);
+                }
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length) {
+                    handleFile(e.target.files[0]);
+                }
+            });
+
+            function handleFile(file) {
+                if (!file.name.match(/\.(mp4|mov)$/i)) {
+                    log('შეცდომა: გთხოვთ აირჩიოთ მხოლოდ MP4 ან MOV ფორმატი!', 'error');
+                    return;
+                }
+                currentFile = file;
+                fileName.textContent = file.name;
+                fileSize.textContent = (file.size / (1024 * 1024)).toFixed(2) + ' MB';
+                fileInfo.classList.remove('hidden');
+                processBtn.disabled = false;
+                downloadBtn.classList.add('hidden');
+                updateProgress(0);
+                log(`MOON METHOD: ფაილი ჩაიტვირთა -> ${file.name}`);
+            }
+
+            removeFile.addEventListener('click', () => {
+                currentFile = null;
+                fileInput.value = '';
+                fileInfo.classList.add('hidden');
+                processBtn.disabled = true;
+                downloadBtn.classList.add('hidden');
+                updateProgress(0);
+                log('MOON METHOD: ფაილი ამოშლილია.');
+            });
+
+            document.getElementById('clearLogs').addEventListener('click', () => {
+                consoleLog.innerHTML = '<p class="text-slate-600">> MOON METHOD ლოგები გასუფთავებულია.</p>';
+            });
+
+            // Core Execution Pipeline
+            processBtn.addEventListener('click', async () => {
+                if (!currentFile) return;
+
+                processBtn.disabled = true;
+                downloadBtn.classList.add('hidden');
+                updateProgress(10);
+                log('MOON METHOD: პროცესი დაიწყო...', 'warn');
+
+                try {
+                    const arrayBuffer = await currentFile.arrayBuffer();
+                    let uint8Data = new Uint8Array(arrayBuffer);
+                    
+                    updateProgress(25);
+
+                    // 1. MOON METHOD - Density Engine Processing
+                    if (document.getElementById('enablePrex').checked) {
+                        log('▶ MOON METHOD [Density Engine] გაშვება...');
+                        const mult = parseInt(document.getElementById('prexMultiplier').value);
+                        const ts = document.getElementById('prexTimescale').value;
+                        
+                        if (typeof window.patchPrex === 'function') {
+                            uint8Data = window.patchPrex(uint8Data, { multiplier: mult });
+                            log(`MOON METHOD: Density დაემატა (${mult}x).`, 'success');
+                        }
+                        if (ts !== 'keep' && typeof window.patchTimescale === 'function') {
+                            uint8Data = window.patchTimescale(uint8Data, parseInt(ts));
+                            log(`MOON METHOD: Timescale -> ${ts} Hz.`, 'success');
+                        }
+                    }
+                    updateProgress(50);
+
+                    // 2. MOON METHOD - Sanitizer Processing
+                    if (document.getElementById('enableKrypton').checked) {
+                        log('▶ MOON METHOD [Sanitizer Engine] გაშვება...');
+                        if (typeof window.KryptonaepMP4 === 'function') {
+                            const engine = new window.KryptonaepMP4(uint8Data);
+                            if (document.getElementById('sanitizeSignatures').checked && engine.sanitizeSignatures) {
+                                engine.sanitizeSignatures();
+                                log('MOON METHOD: მეტამონაცემები გასუფთავდა.', 'success');
+                            }
+                            if (document.getElementById('injectAacClone').checked && engine.injectAacClone) {
+                                engine.injectAacClone();
+                                log('MOON METHOD: AAC Clone ტრეკი დაემატა.', 'success');
+                            }
+                            uint8Data = engine.getResult();
+                        }
+                    }
+                    updateProgress(75);
+
+                    // 3. MOON METHOD - Optimizer Processing
+                    if (document.getElementById('enableInflate').checked) {
+                        log('▶ MOON METHOD [Optimizer Engine] გაშვება...');
+                        if (document.getElementById('stripSei').checked && typeof window.stripSei === 'function') {
+                            uint8Data = window.stripSei(uint8Data);
+                            log('MOON METHOD: SEI ბლოკები ამოღებულია.', 'success');
+                        }
+                        if (document.getElementById('fastStart').checked && typeof window.fastStartNormalize === 'function') {
+                            uint8Data = window.fastStartNormalize(uint8Data);
+                            log('MOON METHOD: Faststart ოპტიმიზაცია დასრულდა.', 'success');
+                        }
+                    }
+
+                    processedBuffer = uint8Data;
+                    updateProgress(100);
+                    log('✔ MOON METHOD: ყველა ოპერაცია წარმატებით დასრულდა!', 'success');
+                    
+                    downloadBtn.classList.remove('hidden');
+                } catch (err) {
+                    log(`MOON METHOD შეცდომა: ${err.message}`, 'error');
+                    console.error(err);
+                } finally {
+                    processBtn.disabled = false;
+                }
+            });
+
+            // Download Trigger
+            downloadBtn.addEventListener('click', () => {
+                if (!processedBuffer) return;
+                const blob = new Blob([processedBuffer], { type: 'video/mp4' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `MOON_METHOD_${currentFile.name}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                log('MOON METHOD: ფაილი ჩამოიტვირთა.');
+            });
+        });
+    </script>
+</body>
+</html>
